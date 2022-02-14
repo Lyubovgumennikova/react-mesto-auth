@@ -9,6 +9,10 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import DeleteCardPopup from "./DeleteCardPopup";
+import { Route } from "react-router-dom";
+import { register } from "../utils/duckAuth";
+import Register from "./Register"
+import Login from "./Login"
 
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
@@ -19,8 +23,11 @@ function App() {
   const [isImagePopupOpen, setImagePopupOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
-   // const [inputValue, setInputValue] = useState("");
-  const [isSubmitted, setIsSubmitted] = useState (false);
+  // const [inputValue, setInputValue] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  
 
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
@@ -66,7 +73,7 @@ function App() {
         console.log(`${err}`);
       })
       .finally(() => {
-        setIsSubmitted(false)
+        setIsSubmitted(false);
         // setInputValue('')
         // renderLoading(false);
       });
@@ -81,17 +88,17 @@ function App() {
         closeAllPopups();
       })
       .catch((err) => {
-        console.log(`${err}`);  
+        console.log(`${err}`);
       })
       .finally(() => {
-        setIsSubmitted(false)
+        setIsSubmitted(false);
       });
   };
 
   const handleAddPlaceSubmit = (inputValue) => {
     // setIsSubmitted(true);
     // handleSubmit: (onAddPlace) => {
-      api
+    api
       .addNewCard(inputValue)
       .then((newCard) => {
         setCards([newCard, ...cards]);
@@ -104,7 +111,6 @@ function App() {
         setIsSubmitted(false);
       });
     // }
-    
   };
 
   function handleCardDelete(data) {
@@ -118,7 +124,7 @@ function App() {
       })
       .catch((err) => console.log(err))
       .finally(() => {
-        setIsSubmitted(false)
+        setIsSubmitted(false);
       });
   }
 
@@ -126,9 +132,14 @@ function App() {
     // Снова проверяем, есть ли уже лайк на этой карточке
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
     // Отправляем запрос в API и получаем обновлённые данные карточки
-    api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
-      setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
-    }).catch((err) => console.log(err))
+    api
+      .changeLikeCardStatus(card._id, !isLiked)
+      .then((newCard) => {
+        setCards((state) =>
+          state.map((c) => (c._id === card._id ? newCard : c))
+        );
+      })
+      .catch((err) => console.log(err));
   }
 
   useEffect(() => {
@@ -143,6 +154,15 @@ function App() {
 
   return (
     <div className="page__container">
+      <Route path="/signup">
+        <Register />
+      </Route>
+      <Route path="/signin">
+        <Login />
+      </Route>
+      <Route path="/sign-up">
+        <Register />
+      </Route>
       <CurrentUserContext.Provider value={currentUser}>
         <Header />
         <Main
@@ -191,6 +211,9 @@ function App() {
           name="image"
         />
       </CurrentUserContext.Provider>
+      {/* <Route exact path="/">
+    {this.state.loggedIn ? <Redirect to="/ducks" /> : <Redirect to="/login" />}
+</Route>  */}
     </div>
   );
 }

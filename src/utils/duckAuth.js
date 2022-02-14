@@ -1,13 +1,15 @@
-export const BASE_URL = 'https://api.nomoreparties.co';
+export const BASE_URL = 'https://auth.nomoreparties.co/';
 
 export const register = (username, password, email) => {
-  return fetch(`${BASE_URL}/auth/local/register`, {
+  return fetch(`${BASE_URL}/signup`, {
     method: 'POST',
     headers: {
-      'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({username, password, email})
+    body: JSON.stringify({
+      "password": "somepassword",
+      "email": "email@yandex.ru"
+    })
   })
   .then((response) => {
     try {
