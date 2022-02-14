@@ -1,0 +1,9 @@
+.popup__close_type_image {
+    margin-left: calc(100% + 8px);
+}
+
+@media (max-width: 619px) {
+    .popup__close_type_image {
+        margin-left: calc(100% - 19px);
+    }
+}
