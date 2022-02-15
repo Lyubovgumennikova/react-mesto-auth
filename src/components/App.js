@@ -9,10 +9,12 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import DeleteCardPopup from "./DeleteCardPopup";
-import { Route } from "react-router-dom";
-import { register } from "../utils/duckAuth";
-import Register from "./Register"
-import Login from "./Login"
+import { Link, Redirect, Route, Switch } from "react-router-dom";
+// import { register } from "../utils/duckAuth";
+import ProtectedRoute from "./ProtectedRoute";
+import Register from "./Register";
+import Login from "./Login";
+import InfoTooltip from "./InfoTooltip";
 
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
@@ -26,8 +28,7 @@ function App() {
   // const [inputValue, setInputValue] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
-
-  
+  // const [loggedIn, setLoggedIn] = useState(false);
 
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
@@ -143,6 +144,8 @@ function App() {
   }
 
   useEffect(() => {
+    setLoggedIn(true)
+    // if (loggedIn) {
     const userData = [api.getUserInfo(), api.getInitialCards()];
     Promise.all(userData)
       .then(([userData, items]) => {
@@ -150,21 +153,31 @@ function App() {
         setCurrentUser(userData);
       })
       .catch((err) => console.log(err));
+    // }
   }, []);
+
+
+  // setLoggedIn
 
   return (
     <div className="page__container">
-      <Route path="/signup">
-        <Register />
-      </Route>
-      <Route path="/signin">
-        <Login />
-      </Route>
-      <Route path="/sign-up">
-        <Register />
-      </Route>
-      <CurrentUserContext.Provider value={currentUser}>
+      <Switch>
+        <Route path="/signup">
+        <Header /> 
+        {/* <Link to="/" className="signup__link"> Войти</Link> */}
+          <Register isOpen={true} />
+        </Route>
+        <Route path="/signin">
+        <Header /> 
+          <Login />
+        </Route>
+        {/* <ProtectedRoute path="/" loggedIn={true} component={Main} />  */}
+         <Route exact path="/">
+          {/* {loggedIn ? <Redirect to="/users/me" /> : <Redirect to="/signin" />} */}
+          <CurrentUserContext.Provider value={currentUser}>
+      
         <Header />
+        {/* {loggedIn && <Main />} */}
         <Main
           onEditAvatar={handleEditAvatarClick}
           onEditProfile={handleEditProfileClick}
@@ -211,9 +224,16 @@ function App() {
           name="image"
         />
       </CurrentUserContext.Provider>
-      {/* <Route exact path="/">
-    {this.state.loggedIn ? <Redirect to="/ducks" /> : <Redirect to="/login" />}
-</Route>  */}
+        </Route>
+      </Switch>
+
+      
+      <InfoTooltip
+        //  onCardClick={isImagePopupOpen}
+        onClose={closeAllPopups}
+        //  card={selectedCard}
+        name="image"
+      />
     </div>
   );
 }

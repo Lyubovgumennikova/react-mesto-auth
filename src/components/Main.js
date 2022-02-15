@@ -1,6 +1,7 @@
 import React from "react";
 import Card from "./Card";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import { Link } from "react-router-dom";
 
 function Main({
   onEditProfile,
@@ -15,6 +16,7 @@ function Main({
 
   return (
     <main className="page__main">
+      <Link to="/signin" className="signup__link"> Выйти</Link>
       <section className="profile">
         <div className="profile__edit">
           <div

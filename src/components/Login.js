@@ -1,79 +1,72 @@
-// Login.js
+import React, { useEffect, useState } from "react";
+import Input from "./Input";
+import PopupWithForm from "./PopupWithForm";
 
-import React from "react";
 import { Link, withRouter } from "react-router-dom";
-import Logo from "./Logo.js";
-import * as duckAuth from "../duckAuth.js";
-import "./styles/Login.css";
+import Form from "./Form";
+// import Logo from "./Logo.js";
+// import * as duckAuth from "../duckAuth.js";
 
-class Login extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: "",
-      password: "",
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-  handleChange(e) {
-    const { name, value } = e.target;
-    this.setState({
-      [name]: value,
-    });
-  }
-  handleSubmit(e) {
-    e.preventDefault();
-    if (!this.state.username || !this.state.password) {
-      return;
-    }
-    // здесь авторизуем пользователя
-    // далее проверяем токен
-    // наконец, перенаправляем пользователя на страницу `/ducks`
-  }
-  render() {
-    return (
-      <div className="login">
-        <Logo title={"CryptoDucks"} />
-        <p className="login__welcome">
-          Это приложение содержит конфиденциальную информацию. Пожалуйста,
-          войдите или зарегистрируйтесь, чтобы получить доступ к CryptoDucks.
-        </p>
-        <form onSubmit={this.handleSubmit} className="login__form">
-          <label htmlFor="username">Логин:</label>
-          <input
-            id="username"
-            required
-            name="username"
-            type="text"
-            value={this.state.username}
-            onChange={this.handleChange}
-          />
-          <label htmlFor="password">Пароль:</label>
-          <input
-            id="password"
-            required
-            name="password"
-            type="password"
-            value={this.state.password}
-            onChange={this.handleChange}
-          />
-          <div className="login__button-container">
-            <button type="submit" className="login__link">
-              Войти
-            </button>
-          </div>
-        </form>
+function Login({ isOpen, onClose, onRegister, isSubmitted, setIsSubmitted }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-        <div className="login__signup">
-          <p>Ещё не зарегистрированы?</p>
-          <Link to="/register" className="signup__link">
-            Зарегистрироваться
-          </Link>
-        </div>
-      </div>
-    );
-  }
+  // function handleSubmit(e) {
+  //   e.preventDefault();
+  //   setIsSubmitted(true);
+
+  //   if (!email || !password) {
+  //     return;
+  //   }
+  //   onRegister({
+  //     email,
+  //     password,
+  //   });
+  // }
+
+  useEffect(() => {
+    setEmail("");
+    setPassword("");
+  }, [isOpen]);
+
+  return (
+    <>
+    <Form
+      name="Login"
+      title="Вход"
+      buttonText="Войти"
+      isSubmitted={isSubmitted}
+      setIsSubmitted={setIsSubmitted}
+      // onSubmit={handleSubmit}
+      isOpen={isOpen}
+      onClose={onClose}
+    >
+      <Input
+        type="email"
+        name="email"
+        placeholder="Email"
+        maxLength="30"
+        handleChange={setEmail}
+        value={email}
+      />
+      <span id="email-error" className="popup__input-error"></span>
+      <Input
+        type="password"
+        name="password"
+        placeholder="Пароль"
+        handleChange={setPassword}
+        value={password}
+      />
+      <span id="password-error" className="popup__input-error"></span>
+      
+      
+    </Form>
+    <p className="popup__text ">Ещё не зарегистрированы?</p>
+    <Link to="/signup" className="signup__link">
+        Зарегистрироваться
+      </Link>
+      </>
+  )
 }
 
 export default withRouter(Login);

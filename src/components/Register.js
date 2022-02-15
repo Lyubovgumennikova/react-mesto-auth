@@ -1,87 +1,73 @@
-// Register.js
-
-import React, { Button } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Logo from "./Logo.js";
-import "./styles/Register.css";
+import Form from "./Form";
+import Input from "./Input";
+import Popup from "./Popup";
+import PopupWithForm from "./PopupWithForm";
 
-class Register extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-  handleChange(e) {
-    const { name, value } = e.target;
-    this.setState({
-      [name]: value,
-    });
-  }
-  handleSubmit(e) {
-    e.preventDefault();
-    if (this.state.password === this.state.confirmPassword) {
-      // сюда добавим логику обработки формы регистрации
-    }
-  }
-  render() {
-    return (
-      <div className="register">
-        <Logo title={"CryptoDucks"} />
-        <p className="register__welcome">Please register.</p>
-        <form onSubmit={this.handleSubmit} className="register__form">
-          <label htmlFor="username">Username:</label>
-          <input
-            id="username"
-            name="username"
-            type="text"
-            value={this.state.username}
-            onChange={this.handleChange}
-          />
-          <label htmlFor="email">Email:</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            value={this.state.email}
-            onChange={this.handleChange}
-          />
-          <label htmlFor="password">Password:</label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            value={this.state.password}
-            onChange={this.handleChange}
-          />
-          <label htmlFor="confirmPassword">Confirm password:</label>
-          <input
-            id="confirmPassword"
-            name="confirmPassword"
-            type="password"
-            value={this.state.confirmPassword}
-            onChange={this.handleChange}
-          />
-          <div className="register__button-container">
-            <button type="submit" className="register__link">
-              Sign up
-            </button>
-          </div>
-        </form>
-        <div className="register__signin">
-          <p>Already a member?</p>
-          <Link to="login" className="register__login-link">
-            Log in here
-          </Link>
-        </div>
-      </div>
-    );
-  }
+function Register({
+  isOpen,
+  onClose,
+  onRegister,
+  isSubmitted,
+  setIsSubmitted,
+}) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  // function handleSubmit(e) {
+  //   e.preventDefault();
+  //   setIsSubmitted(true);
+
+  //   onRegister({
+  //     email,
+  //     password,
+  //   });
+  // }
+
+  useEffect(() => {
+    setEmail("");
+    setPassword("");
+  }, [isOpen]);
+
+  return (
+    <>
+      <Form
+        name="register"
+        title="Регистрация"
+        buttonText="Зарегистрироваться"
+        isSubmitted={isSubmitted}
+        setIsSubmitted={setIsSubmitted}
+        // onSubmit={handleSubmit}
+        isOpen={isOpen}
+        // onClose={onClose}
+      >
+        <Input
+          type="email"
+          name="email"
+          placeholder="Email"
+          maxLength="30"
+          handleChange={setEmail}
+          value={email}
+        />
+        <span id="email-error" className="popup__input-error"></span>
+        <Input
+          type="password"
+          name="password"
+          placeholder="Пароль"
+          handleChange={setPassword}
+          value={password}
+        />
+        <span id="password-error" className="popup__input-error"></span>
+      </Form>
+      <p className="popup__text">
+        Уже зарегистрированы?
+        <Link to="/" className="signup__link">
+          Войти
+        </Link>
+      </p>
+    </>
+  );
 }
 
 export default Register;

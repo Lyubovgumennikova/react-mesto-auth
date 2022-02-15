@@ -17,7 +17,7 @@ function Input ({ type, placeholder, name, maxLength, handleChange, ...props}) {
       id={name}
       className= {`${
         validationMessage
-          ? `popup__input popup__input_prof_name `
+          ? `popup__input `
           : `popup__input popup__input_prof_name popup__input_type_error`
       }`}
       minLength="2"
