@@ -28,7 +28,16 @@ function App() {
   // const [inputValue, setInputValue] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
-  // const [loggedIn, setLoggedIn] = useState(false);
+  // const [isRegiste, setIsRegiste] = useState(false);
+
+  const handleLogin = () => {
+    setLoggedIn(true);
+  };
+
+  // const handleRegister = () => {
+  //   setIsRegiste(!isRegiste);
+  //   // setIsRegiste(true)
+  // }
 
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
@@ -60,6 +69,7 @@ function App() {
     setSelectedCard({ name: "", link: "" });
     setImagePopupOpen(false);
     setIsDeleteCardPopup(false);
+    // setIsRegiste(false);
   };
 
   const handleUpdateUser = (userInfo) => {
@@ -162,22 +172,24 @@ function App() {
   return (
     <div className="page__container">
       <Switch>
-        <Route path="/signup">
+        <Route path="/signup"> 
+        {/* onRegister={handleRegister} */}
         <Header /> 
         {/* <Link to="/" className="signup__link"> Войти</Link> */}
-          <Register isOpen={true} />
+          <Register  />
+          {/* isOpen={true} */}
         </Route>
-        <Route path="/signin">
+        <Route path="/signin" onEditAvatar={handleLogin} >
         <Header /> 
           <Login />
         </Route>
-        {/* <ProtectedRoute path="/" loggedIn={true} component={Main} />  */}
-         <Route exact path="/">
+        {/* <ProtectedRoute path="/users/me" loggedIn={true} component={Main} />  */}
+        <Route exact path="/users/me">
           {/* {loggedIn ? <Redirect to="/users/me" /> : <Redirect to="/signin" />} */}
           <CurrentUserContext.Provider value={currentUser}>
       
-        <Header />
-        {/* {loggedIn && <Main />} */}
+        <Header  /> 
+        {/* {loggedIn && <Main />}   email={email} */}
         <Main
           onEditAvatar={handleEditAvatarClick}
           onEditProfile={handleEditProfileClick}
@@ -225,15 +237,17 @@ function App() {
         />
       </CurrentUserContext.Provider>
         </Route>
+        <Route exact path="/">
+          {loggedIn ? <Redirect to="/" /> : <Redirect to="/signin" />} 
+          </Route>
       </Switch>
 
       
-      <InfoTooltip
-        //  onCardClick={isImagePopupOpen}
+      {/* <InfoTooltip
+        //  onCardClick={handleRegister}
         onClose={closeAllPopups}
-        //  card={selectedCard}
-        name="image"
-      />
+        name="register"
+      /> */}
     </div>
   );
 }

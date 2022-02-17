@@ -1,0 +1,8 @@
+.header__link_email {
+    font-weight: 500;
+    margin-right: 24px;
+}
+
+.header__link_email:hover {
+    opacity: 1;
+}

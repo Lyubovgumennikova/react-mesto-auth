@@ -16,7 +16,6 @@ function Main({
 
   return (
     <main className="page__main">
-      <Link to="/signin" className="signup__link"> Выйти</Link>
       <section className="profile">
         <div className="profile__edit">
           <div

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-function Input ({ type, placeholder, name, maxLength, handleChange, ...props}) {
+function Input ({ type, placeholder, name, maxLength, handleChange, loggedIn , ...props}) {
   const [validationMessage, setValidationMessage] = useState ("");
 
   useEffect(() => {
@@ -15,10 +15,11 @@ function Input ({ type, placeholder, name, maxLength, handleChange, ...props}) {
       type={type}
       placeholder={placeholder}
       id={name}
-      className= {`${
-        validationMessage
+      className= //'popup__input'
+      {`${
+        loggedIn 
           ? `popup__input `
-          : `popup__input popup__input_prof_name popup__input_type_error`
+          : `popup__input popup__input_field  ` //popup__input_prof_name popup__input_type_error
       }`}
       minLength="2"
       maxLength={maxLength}

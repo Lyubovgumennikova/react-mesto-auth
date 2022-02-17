@@ -5,6 +5,10 @@
 @import "./blocks/page/__main/page__main.css";
 @import "./blocks/header/header.css";
 @import "./blocks/header/__logo/header__logo.css";
+@import "./blocks/header/__link/header__link.css";
+@import "./blocks/header/__link/_conteiner/header__link_conteiner.css";
+@import "./blocks/header/__link/_opacity/header__link_opacity..css";
+@import "./blocks/header/__link/_email/header__link_email.css";
 @import "./blocks/profile/profile.css";
 @import "./blocks/profile/__edit/profile__edit.css";
 @import "./blocks/profile/__avatar/profile__avatar.css";
@@ -37,6 +41,7 @@
 @import "./blocks/popup/__submit-button/popup__submit-button.css";
 @import "./blocks/popup/_opened/popup_opened.css";
 @import "./blocks/popup/__input/popup__input.css";
+@import "./blocks/popup/__input/_field/popup__input_field.css";
 @import "./blocks/popup/__mask-group/popup__mask-group.css";
 @import "./blocks/popup/_type/_image/popup_type_image.css";
 @import "./blocks/popup/__text-image/popup__text-image.css";
@@ -44,3 +49,4 @@
 @import "./blocks/popup/__input/_type/popup__input_type_error.css";
 @import "./blocks/popup/__input-error/popup__input-error.css";
 @import "./blocks/popup/__submit-button/_disabled/popup__submit-button_disabled.css";
+@import "./blocks/popup/__field/popup__field.css";

@@ -26,7 +26,6 @@ function Form({
           }`} >
         {isSubmitted ? "Выполняется..." : buttonText}
       </button>
-      )
     </form>
   );
 }

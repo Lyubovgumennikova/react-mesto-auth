@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import Form from "./Form";
 import Input from "./Input";
-import Popup from "./Popup";
-import PopupWithForm from "./PopupWithForm";
+// import Popup from "./Popup";
+// import PopupWithForm from "./PopupWithForm";
+import * as duckAuth from "../utils/duckAuth.js";
 
 function Register({
   isOpen,
@@ -11,34 +12,51 @@ function Register({
   onRegister,
   isSubmitted,
   setIsSubmitted,
+...props  
 }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // function handleSubmit(e) {
-  //   e.preventDefault();
-  //   setIsSubmitted(true);
+  function handleSubmit(e) {
+    e.preventDefault();
+    // setIsSubmitted(true);
 
-  //   onRegister({
-  //     email,
-  //     password,
-  //   });
-  // }
+    duckAuth.register(email, password).then((res) => {
+      console.log(res)
+      // if(res){
+      //   // onRegister({
+      //     console.log(res)
+      //   // , () => {
+      //   //   props.history.push('/signin');
+      //   // }
+      // } else {
+      //   console.log(res)
+      //   // onRegister({
+      //               // message: 'Что-то пошло не так!'
+      //   // })
+      // }
+    });
+    // onRegister({
+    //   email,
+    //   password,
+    // });
+  }
 
-  useEffect(() => {
-    setEmail("");
-    setPassword("");
-  }, [isOpen]);
+  // useEffect(() => {
+  //   setEmail("");
+  //   setPassword("");
+  // }, [isOpen]);
 
   return (
-    <>
-      <Form
+    <div className="popup__field">
+      <h2 className="popup__text">Регистрация</h2>
+      <Form 
         name="register"
-        title="Регистрация"
+        // title="Регистрация"
         buttonText="Зарегистрироваться"
         isSubmitted={isSubmitted}
         setIsSubmitted={setIsSubmitted}
-        // onSubmit={handleSubmit}
+        onSubmit={handleSubmit}
         isOpen={isOpen}
         // onClose={onClose}
       >
@@ -62,12 +80,12 @@ function Register({
       </Form>
       <p className="popup__text">
         Уже зарегистрированы?
-        <Link to="/" className="signup__link">
+        <Link to="/signin" className="signup__link">
           Войти
         </Link>
       </p>
-    </>
+    </div>
   );
 }
 
-export default Register;
+export default withRouter(Register);
