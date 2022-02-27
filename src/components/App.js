@@ -232,7 +232,7 @@ function App() {
     <div className="page__container">
       <Switch>
         <Route path="/signup"> 
-          <Header /> 
+          {/* <Header />  */}
           <Register handleRegister={handleRegister} />
           {/* onEditAvatar={handleLogin */}
           {/* {getContent()} */}
@@ -240,7 +240,7 @@ function App() {
         </Route>
         <Route path="/signin"  >
         {/* onLogin */}
-          <Header /> 
+          {/* <Header />  */}
           <Login handleLogin={handleLogin}  /> 
           {/* tokenCheck={tokenCheck} */}
         </Route>
