@@ -212,6 +212,13 @@ function App() {
       .catch((err) => console.log(err));
   }
 
+  // function NavBar () {
+    // const history = useHistory();
+    function onSignOut (){
+      localStorage.removeItem('jwt');
+      history.push('/login');
+    }
+
   useEffect(() => {
     setIsLoggedIn(true)
     // if (isLoggedIn) {
@@ -249,7 +256,7 @@ function App() {
           {isLoggedIn ? <Redirect to="/users/me" /> : <Redirect to="/signin" />}
           <CurrentUserContext.Provider value={currentUser}>
       
-        <Header  /> 
+        <Header  onSignOut={onSignOut} /> 
         {/* {isLoggedIn && <Main />}   email={email} */}
         <Main userData={isLoggedIn.userData}
           onEditAvatar={handleEditAvatarClick}
