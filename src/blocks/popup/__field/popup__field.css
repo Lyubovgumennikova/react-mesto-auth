@@ -1,12 +1,8 @@
 .popup__field {
-    /* position: fixed; */
-    /* background-color: rgba(0, 0, 0, 0.5); */
+    margin-top: 26px;
     width: 358px;
-    /* height: 100%; */
-    /* visibility: hidden; */
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /* opacity: 0; */
-    /* transition: visibility 0s, opacity 0.5s linear; */
+    
 }

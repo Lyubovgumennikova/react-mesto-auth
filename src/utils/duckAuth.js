@@ -1,51 +1,44 @@
-export const BASE_URL = "https://auth.nomoreparties.co/";
+export const BASE_URL = "https://auth.nomoreparties.co";
 
-export const register = (password, email) => {
-  return fetch(`${BASE_URL}signup`, {
-    method: "POST",
+export const request = ({ url, method = "POST", token, body }) => {
+  const config = {
+    method,
     headers: {
+      Accept: "application/json",
       "Content-Type": "application/json",
+      ...(!!token && { Authorization: `Bearer ${token}` }),
     },
-    body: JSON.stringify({ password, email }),
-    //   "password": "somepassword",
-    //   "email": "email@yandex.ru"
-    // })
-  })
-    .then((response) => {
-      try {
-        if (response.status === 200) {
-          return response.json();
-        }
-      } catch (e) {
-        return e;
-      }
-    })
-    .then((res) => {
-      return res;
-    })
-    .catch((err) => console.log(err));
+    ...(!!body && { body: JSON.stringify(body) }),
+  };
+  return fetch(`${BASE_URL}/${url}`, config).then((response) => {
+    if (response.ok) {
+      return response.json();
+    }
+    return Promise.reject(response.status);
+  });
 };
 
+export const register = (email, password) => {
+  return request({
+    url: `signup`,
+    body: { email, password},
+  });
+};
+//   "password": "somepassword",
+//   "email": "email@yandex.ru"
+// })
+
 export const authorize = (email, password) => {
-  return fetch(`${BASE_URL}signin`, {
-    method: "POST",
-    headers: {
-      // 'Accept': 'application/json',
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      // password,
-      // email,
-        "password": "dsfsdfsdfsdf",
-      "email": "email@email.ru"
-    }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.jwt) {
-        localStorage.setItem("jwt", data.jwt);
-        return data;
-      }
-    })
-    .catch((err) => console.log(err));
+  return request({
+    url: `signin`,
+    body: { email, password },
+  });
+};
+
+export const getContent = (token) => {
+  return request({
+    url: `users/me`,
+    method: "GET",
+    token,
+  });
 };

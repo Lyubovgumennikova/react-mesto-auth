@@ -36,7 +36,11 @@ const Popup = ({isOpen, onClose, name, children }) => {
         }`}
       >
       <button
-        className="popup__close" //
+        className={`${
+          name === "image"
+            ? `popup__close popup__close_type_image`
+            : `popup__close`
+        }`}
         type="button"
         onClick={onClose}
       />

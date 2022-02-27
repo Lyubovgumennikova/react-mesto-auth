@@ -11,9 +11,10 @@ function Main({
   cards,
   onCardLike,
   onCardDelete,
+  // userData,
 }) {
   const currentUser = React.useContext(CurrentUserContext);
-
+  // let { username, email} = userData;
   return (
     <main className="page__main">
       <section className="profile">

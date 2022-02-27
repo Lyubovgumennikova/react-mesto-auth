@@ -18,8 +18,8 @@ function Input ({ type, placeholder, name, maxLength, handleChange, loggedIn , .
       className= //'popup__input'
       {`${
         loggedIn 
-          ? `popup__input `
-          : `popup__input popup__input_field  ` //popup__input_prof_name popup__input_type_error
+          ? `popup__input`
+          : `popup__input popup__input_auth` //popup__input_prof_name popup__input_type_error
       }`}
       minLength="2"
       maxLength={maxLength}
