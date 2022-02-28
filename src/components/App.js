@@ -65,14 +65,16 @@ function App() {
         const userData = {
                 email: res.data.email, // авторизуем пользователя
                 id: res.data._id,};
-                setIsLoggedIn({userData})
-        // setState({
-        //     isLoggedIn: true,
-        //     userData
-        // });
+                // setIsLoggedIn({userData})
+                setIsLoggedIn({
+            loggedIn: true,
+            userData
+        }, () => {
+          history.push("/users/me");
+        });
                       // обернём App.js в withRouter
                       // так, что теперь есть доступ к этому методу
-          history.push("/users/me");
+          // history.push("/users/me");
     }).catch((err) => console.log(err));
   }
 
@@ -239,7 +241,7 @@ function App() {
     <div className="page__container">
       <Switch>
         <Route path="/signup"> 
-          {/* <Header  />  */}
+          <Header  /> 
           <Register handleRegister={handleRegister} />
           {/* onEditAvatar={handleLogin */}
           {/* {getContent()} */}
@@ -247,7 +249,7 @@ function App() {
         </Route>
         <Route path="/signin"  >
         {/* onLogin */}
-          {/* <Header onSignOut={onSignOut} isLoggedIn ={isLoggedIn } />  */}
+          <Header  /> 
           <Login handleLogin={handleLogin}  /> 
           {/* tokenCheck={tokenCheck} */}
         </Route>
