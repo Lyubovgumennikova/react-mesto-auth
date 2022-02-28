@@ -4,7 +4,7 @@ import logo from "../images/logo.svg";
 import { useLocation } from "react-router-dom"; //BrowserRouter as Router,  Switch,
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
-function Header({ onSignOut }) {
+function Header({ onSignOut, userData }) {
   const location = useLocation();
   const { email, isLoggedIn } = useContext(CurrentUserContext);
   return (

@@ -51,7 +51,7 @@ function App() {
     setIsLoggedIn(true);
     // setIsLoggedIn
     // setState(old => ({...old, isLoggedIn:true}) ) 
-    history.push("/"); //"/users/me"
+    history.push("/users/me"); //"/users/me"
   };
 
   const tokenCheck = ()=> {
@@ -63,8 +63,8 @@ function App() {
     duckAuth.getContent(jwt).then((res) => {
         if (!res) return;
         const userData = {
-                email: res.email, // авторизуем пользователя
-                password: res.password,};
+                email: res.data.email, // авторизуем пользователя
+                id: res.data._id,};
                 setIsLoggedIn({userData})
         // setState({
         //     isLoggedIn: true,
@@ -216,7 +216,7 @@ function App() {
     // const history = useHistory();
     function onSignOut (){
       localStorage.removeItem('jwt');
-      history.push('/login');
+      history.push('/signin');
     }
 
   useEffect(() => {
@@ -239,7 +239,7 @@ function App() {
     <div className="page__container">
       <Switch>
         <Route path="/signup"> 
-          {/* <Header />  */}
+          {/* <Header  />  */}
           <Register handleRegister={handleRegister} />
           {/* onEditAvatar={handleLogin */}
           {/* {getContent()} */}
@@ -247,7 +247,7 @@ function App() {
         </Route>
         <Route path="/signin"  >
         {/* onLogin */}
-          {/* <Header />  */}
+          {/* <Header onSignOut={onSignOut} isLoggedIn ={isLoggedIn } />  */}
           <Login handleLogin={handleLogin}  /> 
           {/* tokenCheck={tokenCheck} */}
         </Route>
@@ -256,9 +256,10 @@ function App() {
           {isLoggedIn ? <Redirect to="/users/me" /> : <Redirect to="/signin" />}
           <CurrentUserContext.Provider value={currentUser}>
       
-        <Header  onSignOut={onSignOut} /> 
+        <Header  onSignOut={onSignOut} userData  /> 
+        {/* email={isLoggedIn.userData.email} */}
         {/* {isLoggedIn && <Main />}   email={email} */}
-        <Main userData={isLoggedIn.userData}
+        <Main 
           onEditAvatar={handleEditAvatarClick}
           onEditProfile={handleEditProfileClick}
           onAddPlace={handleAddPlaceClick}
