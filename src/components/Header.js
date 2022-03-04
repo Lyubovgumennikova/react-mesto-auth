@@ -4,25 +4,25 @@ import logo from "../images/logo.svg";
 import { useLocation } from "react-router-dom"; //BrowserRouter as Router,  Switch,
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
-function Header({ onSignOut, email }) {
+function Header({ onSignOut, loggedIn, email }) {
   const location = useLocation();
-  // const { email, isLoggedIn } = useContext(CurrentUserContext);
+  // const { email, loggedIn } = useContext(CurrentUserContext);
   return (
     <header className="header">
       <img className="header__logo" src={logo} alt="логотип" />
-      {/* {isLoggedIn ? ( */}
+      {loggedIn ? (
         <div className="header__link_conteiner">
           <p className="header__link header__link_email">{email}</p>
           <button type="button" onClick={onSignOut}>Выйти</button>
-        </div> 
-        {/* : ( {
-          location.pathname === '/signin' ? (
-            <Link to='/signup'>Регистрация</Link>)
-            : ( <Link to='/signin'>Войти</Link>)
+        </div> )
+        // : ( {
+        //   location.pathname === '/signin' ? (
+        //     <Link to='/signup'>Регистрация</Link>)
+            : ( <Link className="header__link header__link_opacity" to='/signin'>Войти</Link>)
            
-        })
+        // })
 
-      } */}
+      }
     </header>
   );
 }

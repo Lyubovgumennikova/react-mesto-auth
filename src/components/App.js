@@ -29,14 +29,14 @@ function App() {
   const [cards, setCards] = useState([]);
   // const [inputValue, setInputValue] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-  // const [state, setState] = useState({isLoggedIn:false});
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [state, setState] = useState({ loggedIn: false });
+
   const [isRegister, setIsRegister] = useState(false);
   const history = useHistory();
 
-  useEffect (() => {
+  useEffect(() => {
     tokenCheck();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // const componentDidMount=()=> {
@@ -46,56 +46,66 @@ function App() {
 
   const handleLogin = (jwt) => {
     if (!jwt) return;
-    
+
     localStorage.setItem("jwt", jwt);
-    setIsLoggedIn(true);
-    // setIsLoggedIn
-    // setState(old => ({...old, isLoggedIn:true}) ) 
+    setState({
+      loggedIn: true,
+      // userData
+    });
+    // setState
+    // setState(old => ({...old, loggedIn:true}) )
     history.push("/users/me"); //"/users/me"
   };
 
-  const tokenCheck = ()=> {
-    if (!localStorage.getItem('jwt')) return;
+  const tokenCheck = () => {
+    if (!localStorage.getItem("jwt")) return;
 
-    const jwt = localStorage.getItem('jwt');
+    const jwt = localStorage.getItem("jwt");
     // if (jwt){
-      // проверим токен
-    duckAuth.getContent(jwt).then((res) => {
+    // проверим токен
+    duckAuth
+      .getContent(jwt)
+      .then((res) => {
         if (!res) return;
         const userData = {
-                email: res.data.email, // авторизуем пользователя
-                id: res.data._id,};
-                // setIsLoggedIn({userData})
-                setIsLoggedIn({
+          email: res.data.email, // авторизуем пользователя
+          id: res.data._id,
+        };
+        // setState({userData})
+        setState(
+          {
             loggedIn: true,
-            userData
-        }, () => {
-          history.push("/users/me");
-        });
-                      // обернём App.js в withRouter
-                      // так, что теперь есть доступ к этому методу
-          // history.push("/users/me");
-    }).catch((err) => console.log(err));
-  }
+            userData,
+          },
+          () => {
+            history.push("/users/me");
+          }
+        );
+        // обернём App.js в withRouter
+        // так, что теперь есть доступ к этому методу
+        // history.push("/users/me");
+      })
+      .catch((err) => console.log(err));
+  };
 
   const handleRegister = () => {
-    setIsRegister(true)
-    history.push('/signin')
-    // isSubmitted//isLoggedIn
+    setIsRegister(true);
+    history.push("/signin");
+    // isSubmitted//loggedIn
     //  ? history.push('/signin')
     //  : history.push('/signup')
     //  : (src = UnionX)
-    
+
     // isOpen=(true)
     // setIsRegister(!isRegister);
     // setIsRegister(true)
-  }
+  };
 
   // const handleInfoToolti = () => {
   //   // setIsEditProfilePopupOpen(true);
   //   this.props.isOpen(true)
   //   // this.props.history.push('/signin');
-    
+
   //   // setIsRegister(!isRegister);
   //   // setIsRegister(true)
   // }
@@ -215,15 +225,15 @@ function App() {
   }
 
   // function NavBar () {
-    // const history = useHistory();
-    function onSignOut (){
-      localStorage.removeItem('jwt');
-      history.push('/signin');
-    }
+  // const history = useHistory();
+  function onSignOut() {
+    localStorage.removeItem("jwt");
+    history.push("/signin");
+  }
 
   useEffect(() => {
-    setIsLoggedIn(true)
-    // if (isLoggedIn) {
+    // setState(true);
+    // if (loggedIn) {
     const userData = [api.getUserInfo(), api.getInitialCards()];
     Promise.all(userData)
       .then(([userData, items]) => {
@@ -234,91 +244,87 @@ function App() {
     // }
   }, []);
 
-
-  // setIsLoggedIn
+  // setState
 
   return (
     <div className="page__container">
       <Switch>
-        <Route path="/signup"> 
-          <Header  /> 
+        <Route path="/signup">
+          <Header />
           <Register handleRegister={handleRegister} />
-          {/* onEditAvatar={handleLogin */}
-          {/* {getContent()} */}
-          {/* isOpen={true} */}
         </Route>
-        <Route path="/signin"  >
-        {/* onLogin */}
-          <Header  /> 
-          <Login handleLogin={handleLogin}  /> 
-          {/* tokenCheck={tokenCheck} */}
+        <Route path="/signin">
+          <Header />
+          <Login handleLogin={handleLogin} loggedIn={state.loggedIn} />
         </Route>
-        {/* <ProtectedRoute path="/users/me" isLoggedIn={true} component={Main} /> */}
-        <Route exact path="/users/me"> 
-          {isLoggedIn ? <Redirect to="/users/me" /> : <Redirect to="/signin" />}
+        {/* <ProtectedRoute path="/users/me" loggedIn={true} component={Main} /> */}
+        <Route exact path="/users/me">
+          {state.loggedIn ? (
+            <Redirect to="/users/me" />
+          ) : (
+            <Redirect to="/signin" />
+          )}
           <CurrentUserContext.Provider value={currentUser}>
-      
-        <Header  onSignOut={onSignOut} userData  /> 
-        {/* email={isLoggedIn.userData.email} */}
-        {/* {isLoggedIn && <Main />}   email={email} */}
-        <Main 
-          onEditAvatar={handleEditAvatarClick}
-          onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddPlaceClick}
-          onCardClick={handleCardClick}
-          onCardLike={handleCardLike}
-          onCardDelete={handleDeleteCardPopupClick}
-          cards={cards}
-        />
-        <Footer />
-        <EditProfilePopup
-          isOpen={isEditProfilePopupOpen}
-          onClose={closeAllPopups}
-          onUpdateUser={handleUpdateUser}
-          isSubmitted={isSubmitted}
-          setIsSubmitted={setIsSubmitted}
-        />
-        <AddPlacePopup
-          isOpen={isAddPlacePopupOpen}
-          onClose={closeAllPopups}
-          onAddPlace={handleAddPlaceSubmit}
-          isSubmitted={isSubmitted}
-          setIsSubmitted={setIsSubmitted}
-        />
-        <EditAvatarPopup
-          isOpen={isEditAvatarPopupOpen}
-          onClose={closeAllPopups}
-          onUpdateAvatar={handleUpdateAvatar}
-          setIsSubmitted={setIsSubmitted}
-          isSubmitted={isSubmitted}
-        />
-        <DeleteCardPopup
-          isOpen={isDeleteCardPopup}
-          card={selectedCard}
-          onCardDelete={handleCardDelete}
-          onClose={closeAllPopups}
-          isSubmitted={isSubmitted}
-          setIsSubmitted={setIsSubmitted}
-        />
-        <ImagePopup
-          onCardClick={isImagePopupOpen}
-          onClose={closeAllPopups}
-          card={selectedCard}
-          name="image"
-        />
-      </CurrentUserContext.Provider>
-      {/* </ProtectedRoute> */}
-      {/* {/* <Route>
-      {isLoggedIn ? <Redirect to="/users/me" /> : <Redirect to="/signin" />} */}
-</Route> 
+            <Header onSignOut={onSignOut} userData loggedIn={state.loggedIn} />
+            {/* email={loggedIn.userData.email} */}
+            {/* {loggedIn && <Main />}   email={email} */}
+            <Main
+              onEditAvatar={handleEditAvatarClick}
+              onEditProfile={handleEditProfileClick}
+              onAddPlace={handleAddPlaceClick}
+              onCardClick={handleCardClick}
+              onCardLike={handleCardLike}
+              onCardDelete={handleDeleteCardPopupClick}
+              cards={cards}
+            />
+            <Footer />
+            <EditProfilePopup
+              isOpen={isEditProfilePopupOpen}
+              onClose={closeAllPopups}
+              onUpdateUser={handleUpdateUser}
+              isSubmitted={isSubmitted}
+              setIsSubmitted={setIsSubmitted}
+            />
+            <AddPlacePopup
+              isOpen={isAddPlacePopupOpen}
+              onClose={closeAllPopups}
+              onAddPlace={handleAddPlaceSubmit}
+              isSubmitted={isSubmitted}
+              setIsSubmitted={setIsSubmitted}
+            />
+            <EditAvatarPopup
+              isOpen={isEditAvatarPopupOpen}
+              onClose={closeAllPopups}
+              onUpdateAvatar={handleUpdateAvatar}
+              setIsSubmitted={setIsSubmitted}
+              isSubmitted={isSubmitted}
+            />
+            <DeleteCardPopup
+              isOpen={isDeleteCardPopup}
+              card={selectedCard}
+              onCardDelete={handleCardDelete}
+              onClose={closeAllPopups}
+              isSubmitted={isSubmitted}
+              setIsSubmitted={setIsSubmitted}
+            />
+            <ImagePopup
+              onCardClick={isImagePopupOpen}
+              onClose={closeAllPopups}
+              card={selectedCard}
+              name="image"
+            />
+          </CurrentUserContext.Provider>
+          {/* </ProtectedRoute> */}
+          {/* {/* <Route>
+      {loggedIn ? <Redirect to="/users/me" /> : <Redirect to="/signin" />} */}
+        </Route>
         <Route exact path="/">
-          {isLoggedIn ? <Redirect to="/" /> : <Redirect to="/signin" />} 
-          </Route>
+          {state.loggedIn ? <Redirect to="/" /> : <Redirect to="/signin" />}
+        </Route>
       </Switch>
 
-      
       <InfoTooltip
-      // old={handleInfoToolti}
+        // old={handleInfoToolti}
         //  onLogin={handleInfoToolti}
         // isOpen={true}
         isOpen={isRegister}
