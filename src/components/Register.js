@@ -22,59 +22,15 @@ function Register(onLogin, onRegister, setIsRegister, handleInfoToolti, ...props
   
   function handleSubmit(e) {
     e.preventDefault();
-    // setIsSubmitted(true);
-    // setIsRegister(true)
-    // const {email, password} = state;
-    // onRegister({ 
-    //   state,  
-    // });
-
     const {email, password} = state;
 
     duckAuth.register(email, password)
       .then (() => {
-        
-        setState(old => ({...old, 
-          message: 'пуак' }))  //( onRegister => ( {src}={UnionV} ) );
-      //   <InfoTooltip
-      //     isOpen=true
-      // //  onClose={closeAllPopups}
-      //  src={UnionV} 
-      // //  name="register" 
-      // />
-          // onRegister (src={UnionV})
-          onLogin.handleRegister()   //props.history.push('/signin');
+        onLogin.setIsRegister(true)
+        onLogin.handleRegister() 
       })
-      // .catch((err) => console.log(err));
-      // .catch((err) => setState(
-      //   message: 'xnj-nj yt nfr' ,
-      //   setIsRegister(true))
-      
-      // )
-        // setIsRegister(true)
-      // }))),
-      .catch(() =>   
-      setState( 
-        // console.log()
-        old => ({
-        
-        ...old, 
-        // setIsRegister(true),
-      //   // onLogin.handleRegister(),
-        message: 'xnj-nj yt nfr',
-        // setIsRegister:true
-      //   // handleInfoToolti,
-      //   // old.setIsRegister(true)
-      //   // setIsRegister:true,
-      //   // handleRegister() 
-      //   // onLogin
-      //   // props.isOpen =(true),
-      // onLogin.handleRegister()
-      } ))  
-      )//    props.handleRegister()
-      onLogin.setIsRegister(true)
-      // setIsRegister(true)
-  }
+      .catch(() => onLogin.setIsRegister(true))
+}
 
   // useEffect(() => {
   //   setIsRegister(false)
