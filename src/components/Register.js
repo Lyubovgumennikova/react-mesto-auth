@@ -6,7 +6,7 @@ import Input from "./Input";
 // import PopupWithForm from "./PopupWithForm";
 import * as duckAuth from "../utils/duckAuth.js";
 
-function Register(onLogin, onRegister, setIsRegister, ...props) {
+function Register(onLogin, onRegister, setIsRegister, handleInfoToolti, ...props) {
   const [state, setState] = useState({
     email: '',
     password: '',
@@ -33,7 +33,7 @@ function Register(onLogin, onRegister, setIsRegister, ...props) {
 
     duckAuth.register(email, password)
       .then (() => {
-        // setIsRegister(true)
+        
         setState(old => ({...old, 
           message: 'пуак' }))  //( onRegister => ( {src}={UnionV} ) );
       //   <InfoTooltip
@@ -69,10 +69,10 @@ function Register(onLogin, onRegister, setIsRegister, ...props) {
       //   // handleRegister() 
       //   // onLogin
       //   // props.isOpen =(true),
-      //  props.handleRegister()
+      // onLogin.handleRegister()
       } ))  
       )//    props.handleRegister()
-      // onLogin.handleRegister()
+      onLogin.setIsRegister(true)
       // setIsRegister(true)
   }
 

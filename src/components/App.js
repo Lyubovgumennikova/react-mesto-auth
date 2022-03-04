@@ -16,7 +16,7 @@ import Register from "./Register";
 import Login from "./Login";
 import InfoTooltip from "./InfoTooltip";
 import * as duckAuth from "../utils/duckAuth.js";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useHistory, useLocation } from "react-router-dom/cjs/react-router-dom.min";
 
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
@@ -33,6 +33,7 @@ function App() {
 
   const [isRegister, setIsRegister] = useState(false);
   const history = useHistory();
+  const location = useLocation();
 
   useEffect(() => {
     tokenCheck();
@@ -61,36 +62,57 @@ function App() {
     if (!localStorage.getItem("jwt")) return;
 
     const jwt = localStorage.getItem("jwt");
-    // if (jwt){
-    // проверим токен
-    duckAuth
-      .getContent(jwt)
-      .then((res) => {
-        if (!res) return;
-        const userData = {
-          email: res.data.email, // авторизуем пользователя
-          id: res.data._id,
-        };
-        // setState({userData})
-        setState(
-          {
-            loggedIn: true,
-            userData,
-          },
-          () => {
-            history.push("/users/me");
-          }
-        );
-        // обернём App.js в withRouter
-        // так, что теперь есть доступ к этому методу
-        // history.push("/users/me");
-      })
-      .catch((err) => console.log(err));
+    // if (jwt) {
+      // проверим токен
+      duckAuth
+        .getContent(jwt)
+        // .then((res) => {
+        //   // if (!res) return;
+        //   if (res) {
+        //     const userData = {
+        //       email: res.data.email, // авторизуем пользователя
+        //       id: res.data._id,
+        //     };
+        //     // setState({userData})
+        //     setState(
+        //       {
+        //         loggedIn: true,
+        //         userData,
+        //       },
+        //       () => {
+        //         history.push("/users/me");
+        //       }
+        //     );
+        //   }
+        // })
+        .then((res) => {
+          if (!res) return;
+          const userData = {
+            email: res.data.email, // авторизуем пользователя
+            id: res.data._id,
+          };
+          // setState({userData})
+          setState(
+            {
+              loggedIn: true,
+              userData,
+            },
+            () => {
+              history.push("/users/me");
+            }
+          );
+          // обернём App.js в withRouter
+          // так, что теперь есть доступ к этому методу
+          // history.push("/users/me");
+        })
+        .catch((err) => console.log(err));
+    // }
   };
 
   const handleRegister = () => {
-    setIsRegister(true);
     history.push("/signin");
+    // setIsRegister(true);
+    // history.push("/signin");
     // isSubmitted//loggedIn
     //  ? history.push('/signin')
     //  : history.push('/signup')
@@ -101,14 +123,14 @@ function App() {
     // setIsRegister(true)
   };
 
-  // const handleInfoToolti = () => {
-  //   // setIsEditProfilePopupOpen(true);
-  //   this.props.isOpen(true)
-  //   // this.props.history.push('/signin');
+  const handleInfoToolti = () => {
+    // setIsEditProfilePopupOpen(true);
+    setIsRegister(true);
+    // this.props.history.push('/signin');
 
-  //   // setIsRegister(!isRegister);
-  //   // setIsRegister(true)
-  // }
+    // setIsRegister(!isRegister);
+    // setIsRegister(true)
+  }
 
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
@@ -250,14 +272,14 @@ function App() {
     <div className="page__container">
       <Switch>
         <Route path="/signup">
-          <Header />
-          <Register handleRegister={handleRegister} />
+          <Header location={location} />
+        <Register handleRegister={handleRegister} setIsRegister={setIsRegister} />
         </Route>
         <Route path="/signin">
-          <Header />
+          <Header location={location} />
           <Login handleLogin={handleLogin} loggedIn={state.loggedIn} />
         </Route>
-        {/* <ProtectedRoute path="/users/me" loggedIn={true} component={Main} /> */}
+        {/* <ProtectedRoute path="/users/me" loggedIn={state.loggedIn} component={Main} /> */}
         <Route exact path="/users/me">
           {state.loggedIn ? (
             <Redirect to="/users/me" />
@@ -331,7 +353,9 @@ function App() {
         onClose={closeAllPopups}
         name="register"
         // src={src}
-        // isSubmitted={isSubmitted}
+        loggedIn={state.loggedIn}
+        handleInfoToolti={handleInfoToolti}
+        location={location}
       />
     </div>
   );

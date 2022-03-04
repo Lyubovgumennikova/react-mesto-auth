@@ -8,6 +8,7 @@ function InfoTooltip({
   isOpen,
   onClose,
   loggedIn,
+  location,
   // UnionV,
   src,
   text,
@@ -20,13 +21,13 @@ function InfoTooltip({
           className="popup__image-register"
           src={
             //src}
-            !isSubmitted ? (src = UnionV) : (src = UnionX)
+            location.pathname === '/signin'  ? (src = UnionV) : (src = UnionX)
           }
           alt={name}
         />
         <figcaption className="popup__text">
            {/* {text} */}
-          {  !loggedIn  //isSubmitted 
+          {  location.pathname === '/signin' 
       ? "Вы успешно зарегистрировались!" 
       : "Что-то пошло не так! Попробуйте ещё раз."} 
         </figcaption>
