@@ -46,12 +46,7 @@ function Login({
     duckAuth.authorize(email, password)
     .then((data) => {
         if (!data.token) { //.jwt
-          setState(old => ({
-        
-            ...old, message: 'xnj-nj yt nfr' 
-          
-          } ) ); 
-          return;
+                  return;
           // onLogin({
           //   UnionX
           // });

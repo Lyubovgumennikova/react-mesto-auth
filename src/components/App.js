@@ -16,7 +16,10 @@ import Register from "./Register";
 import Login from "./Login";
 import InfoTooltip from "./InfoTooltip";
 import * as duckAuth from "../utils/duckAuth.js";
-import { useHistory, useLocation } from "react-router-dom/cjs/react-router-dom.min";
+import {
+  useHistory,
+  useLocation,
+} from "react-router-dom/cjs/react-router-dom.min";
 
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
@@ -30,7 +33,7 @@ function App() {
   // const [inputValue, setInputValue] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [state, setState] = useState({ loggedIn: false });
-
+  // const [email, setEmail] = useState("");
   const [isRegister, setIsRegister] = useState(false);
   const history = useHistory();
   const location = useLocation();
@@ -51,7 +54,7 @@ function App() {
     localStorage.setItem("jwt", jwt);
     setState({
       loggedIn: true,
-      // userData
+      // email
     });
     // setState
     // setState(old => ({...old, loggedIn:true}) )
@@ -63,49 +66,49 @@ function App() {
 
     const jwt = localStorage.getItem("jwt");
     // if (jwt) {
-      // проверим токен
-      duckAuth
-        .getContent(jwt)
-        // .then((res) => {
-        //   // if (!res) return;
-        //   if (res) {
-        //     const userData = {
-        //       email: res.data.email, // авторизуем пользователя
-        //       id: res.data._id,
-        //     };
-        //     // setState({userData})
-        //     setState(
-        //       {
-        //         loggedIn: true,
-        //         userData,
-        //       },
-        //       () => {
-        //         history.push("/users/me");
-        //       }
-        //     );
-        //   }
-        // })
-        .then((res) => {
-          if (!res) return;
-          const userData = {
-            email: res.data.email, // авторизуем пользователя
-            id: res.data._id,
-          };
-          // setState({userData})
-          setState(
-            {
-              loggedIn: true,
-              userData,
-            },
-            () => {
-              history.push("/users/me");
-            }
-          );
-          // обернём App.js в withRouter
-          // так, что теперь есть доступ к этому методу
-          // history.push("/users/me");
-        })
-        .catch((err) => console.log(err));
+    // проверим токен
+    duckAuth
+      .getContent(jwt)
+      // .then((res) => {
+      //   // if (!res) return;
+      //   if (res) {
+      //     const userData = {
+      //       email: res.data.email, // авторизуем пользователя
+      //       id: res.data._id,
+      //     };
+      //     // setState({userData})
+      //     setState(
+      //       {
+      //         loggedIn: true,
+      //         userData,
+      //       },
+      //       () => {
+      //         history.push("/users/me");
+      //       }
+      //     );
+      //   }
+      // })
+      .then((res) => {
+        if (!res) return;
+        const userData = {
+          email: res.data.email, // авторизуем пользователя
+          id: res.data._id,
+        };
+        // setState({userData})
+        setState(
+          {
+            loggedIn: true,
+            userData,
+          },
+          () => {
+            history.push("/users/me");
+          }
+        );
+        // обернём App.js в withRouter
+        // так, что теперь есть доступ к этому методу
+        // history.push("/users/me");
+      })
+      .catch((err) => console.log(err));
     // }
   };
 
@@ -130,7 +133,7 @@ function App() {
 
     // setIsRegister(!isRegister);
     // setIsRegister(true)
-  }
+  };
 
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
@@ -254,6 +257,7 @@ function App() {
   }
 
   useEffect(() => {
+    // tokenCheck();
     // setState(true);
     // if (loggedIn) {
     const userData = [api.getUserInfo(), api.getInitialCards()];
@@ -270,27 +274,25 @@ function App() {
 
   return (
     <div className="page__container">
-       {/* <Header onSignOut={onSignOut} email ={setState.userData.email } loggedIn={state.loggedIn} /> */}
-      <Switch>
-        <Route path="/signup">
-          <Header location={location} />
-        <Register handleRegister={handleRegister} setIsRegister={setIsRegister} />
-        </Route>
-        <Route path="/signin">
-          <Header location={location} />
-          <Login handleLogin={handleLogin} loggedIn={state.loggedIn} />
-        </Route>
-        {/* <ProtectedRoute path="/users/me" loggedIn={state.loggedIn} component={Main} /> */}
-        <Route exact path="/users/me">
-          {state.loggedIn ? (
-            <Redirect to="/users/me" />
-          ) : (
-            <Redirect to="/signin" />
-          )}
-          <CurrentUserContext.Provider value={currentUser}>
-            <Header onSignOut={onSignOut} loggedIn={state.loggedIn} />
-            {/* email={loggedIn.userData.email} */}
-            {/* {loggedIn && <Main />}   email={email} */}
+      <CurrentUserContext.Provider value={currentUser}>
+        <Switch>
+          <Route path="/signup">
+            <Header location={location} />
+            <Register
+              handleRegister={handleRegister}
+              setIsRegister={setIsRegister}
+            />
+          </Route>
+          <Route path="/signin">
+            <Header location={location} />
+            <Login handleLogin={handleLogin} loggedIn={state.loggedIn} />
+          </Route>
+          <ProtectedRoute path="/users/me" loggedIn={state.loggedIn}>
+            <Header
+              onSignOut={onSignOut}
+              location={location}
+              loggedIn={state.loggedIn}
+            />
             <Main
               onEditAvatar={handleEditAvatarClick}
               onEditProfile={handleEditProfileClick}
@@ -336,16 +338,16 @@ function App() {
               card={selectedCard}
               name="image"
             />
-          </CurrentUserContext.Provider>
-          {/* </ProtectedRoute> */}
+            {/* </CurrentUserContext.Provider> */}
+          </ProtectedRoute>
           {/* {/* <Route>
       {loggedIn ? <Redirect to="/users/me" /> : <Redirect to="/signin" />} */}
-        </Route>
-        <Route exact path="/">
-          {state.loggedIn ? <Redirect to="/" /> : <Redirect to="/signin" />}
-        </Route>
-      </Switch>
-
+          {/* </Route> */}
+          <Route exact path="/">
+            {state.loggedIn ? <Redirect to="/" /> : <Redirect to="/signin" />}
+          </Route>
+        </Switch>
+      </CurrentUserContext.Provider>
       <InfoTooltip
         // old={handleInfoToolti}
         //  onLogin={handleInfoToolti}
