@@ -270,6 +270,7 @@ function App() {
 
   return (
     <div className="page__container">
+       {/* <Header onSignOut={onSignOut} email ={setState.userData.email } loggedIn={state.loggedIn} /> */}
       <Switch>
         <Route path="/signup">
           <Header location={location} />
@@ -287,7 +288,7 @@ function App() {
             <Redirect to="/signin" />
           )}
           <CurrentUserContext.Provider value={currentUser}>
-            <Header onSignOut={onSignOut} userData loggedIn={state.loggedIn} />
+            <Header onSignOut={onSignOut} loggedIn={state.loggedIn} />
             {/* email={loggedIn.userData.email} */}
             {/* {loggedIn && <Main />}   email={email} */}
             <Main

@@ -74,9 +74,9 @@ function Register(onLogin, onRegister, setIsRegister, handleInfoToolti, ...props
         />
         <span id="password-error" className="popup__input-error"></span>
       </Form>
-      <p className="popup__text popup__text_auth">
+      <p className="popup__auth">
         Уже зарегистрированы?
-        <Link to="/signin" className="signup__link">
+        <Link to="/signin" className="popup__auth">
           Войти
         </Link>
       </p>

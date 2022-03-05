@@ -111,10 +111,10 @@ function Login({
         />
         <span id="password-error" className="popup__input-error"></span>
       </Form>
-      <p className="popup__text popup__text_auth">Ещё не зарегистрированы?</p>
+      {/* <p className="popup__text popup__text_auth">Ещё не зарегистрированы?</p>
       <Link to="/signup" className="signup__link">
         Зарегистрироваться
-      </Link>
+      </Link> */}
     </div>
   );
 }
