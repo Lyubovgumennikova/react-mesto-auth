@@ -17,7 +17,7 @@ function Input ({ type, placeholder, name, maxLength, handleChange, loggedIn , .
       id={name}
       className= 'popup__input'
       // {`${
-      //   loggedIn 
+      //   validationMessage
       //     ? `popup__input`
       //     : `popup__input popup__input_auth` //popup__input_prof_name popup__input_type_error
       // }`}

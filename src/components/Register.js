@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Link, withRouter } from "react-router-dom";
+import React, { useState } from "react";
+import { Link} from "react-router-dom";
 import Form from "./Form";
-import Input from "./Input";
-// import Popup from "./Popup";
-// import PopupWithForm from "./PopupWithForm";
 import * as duckAuth from "../utils/duckAuth.js";
 
-function Register(onLogin, onRegister, setIsRegister, handleInfoToolti, ...props) {
+function Register(onLogin,  ...props) {
   const [state, setState] = useState({
     email: '',
     password: '',
@@ -20,17 +17,6 @@ function Register(onLogin, onRegister, setIsRegister, handleInfoToolti, ...props
     }))
   }
   
-//   function handleSubmit(e) {
-//     e.preventDefault();
-//     const {email, password} = state;
-
-//     duckAuth.register(email, password)
-//       .then (() => {
-//         onLogin.setIsRegister(true)
-//         onLogin.handleRegister() 
-//       })
-//       .catch(() => onLogin.setIsRegister(true))
-// }
 function handleSubmit(e) {
   e.preventDefault();
   const {email, password} = state;
@@ -60,17 +46,13 @@ function handleSubmit(e) {
         isSubmitted={props.isSubmitted}
         setIsSubmitted={props.setIsSubmitted}
         onSubmit={handleSubmit}
-        // isOpen={isOpen}
-        // onClose={onClose}
-      >
+        >
         <input
           type="email"
           name="email"
           className= 'popup__input popup__input_auth'
           placeholder="Email"
-          // maxLength="30"
           onChange={handleChange}  
-          // handleChange={setState.email}
           value={state.email}
         />
         <span id="email-error" className="popup__input-error"></span>
@@ -80,7 +62,6 @@ function handleSubmit(e) {
           className= 'popup__input popup__input_auth'
           placeholder="Пароль"
           onChange={handleChange}
-          // handleChange={setState.password}
           value={state.password}
         />
         <span id="password-error" className="popup__input-error"></span>
