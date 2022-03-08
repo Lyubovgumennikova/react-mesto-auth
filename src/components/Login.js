@@ -83,8 +83,12 @@ function Login({
         isSubmitted={isSubmitted}
         setIsSubmitted={setIsSubmitted}
         onSubmit={handleSubmit}
+        className = {'button ' + 'popup__submit-button_auth'}
+        // className = {'button ' + (this.props.isRed ? 'button--red' : '')}
+        // className={`${"popup__submit-button_auth"}`}
         // isOpen={isOpen}
         // onClose={onClose}
+        
       >
         <input
           type="email"
@@ -105,6 +109,7 @@ function Login({
           placeholder="Пароль"
           onChange={handleChange} //={setPassword}
           value={state.password}
+          
         />
         <span id="password-error" className="popup__input-error"></span>
       </Form>

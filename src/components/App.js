@@ -84,32 +84,33 @@ function App() {
     if (!localStorage.getItem("jwt")) return;
 
     const jwt = localStorage.getItem("jwt");
-    if (jwt) {
+    // if (jwt) {
     // проверим токен
     duckAuth
       .getContent(jwt)
       .then((res) => {
-        if (res) {    //return;
+        if (!res) return; //{    //return;
+
         const userData = {
           email: res.data.email, // авторизуем пользователя
           id: res.data._id,
         };
         // setState({userData})
-        setState(
-          {
+        setState({
             loggedIn: true,
             userData,
-          }, () => {
-            history.push("/users/me");
-          }
-        );
-      }
+          });
+
+          history.push("/users/me");
+          
+        // );
+      // }
         // обернём App.js в withRouter
         // так, что теперь есть доступ к этому методу
         // history.push("/users/me");
       })
       .catch((err) => console.log(err));
-    }
+    // }
   };
   const handleLogin = (jwt) => {
     if (!jwt) return;

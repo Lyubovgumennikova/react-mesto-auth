@@ -14,9 +14,12 @@ function Header({ onSignOut, loggedIn, location, userData, email }) {
       {loggedIn ? (
         <div className="header__link_conteiner">
           <p className="header__link header__link_email">{userData.email}</p>
-          <button type="button" className="header__link header__link_email" onClick={onSignOut}>
-            Выйти
-          </button>
+          <Link className="header__link" to="/signin" onClick={onSignOut}>
+          Выйти
+        </Link>
+          {/* <button type="button" className="header__link" onClick={onSignOut}> */}
+            {/* Выйти
+          </button> */}
         </div>
       ) : location.pathname === "/signin" ? (
         <Link className="header__link"  to="/signup">Регистрация</Link>

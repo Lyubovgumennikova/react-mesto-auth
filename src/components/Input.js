@@ -15,12 +15,12 @@ function Input ({ type, placeholder, name, maxLength, handleChange, loggedIn , .
       type={type}
       placeholder={placeholder}
       id={name}
-      className= //'popup__input'
-      {`${
-        loggedIn 
-          ? `popup__input`
-          : `popup__input popup__input_auth` //popup__input_prof_name popup__input_type_error
-      }`}
+      className= 'popup__input'
+      // {`${
+      //   loggedIn 
+      //     ? `popup__input`
+      //     : `popup__input popup__input_auth` //popup__input_prof_name popup__input_type_error
+      // }`}
       minLength="2"
       maxLength={maxLength}
       // onChange={onChange}

@@ -41,6 +41,7 @@
 @import "./blocks/popup/__text/_auth/popup__text_auth.css";
 @import "./blocks/popup/__content/popup__content.css";
 @import "./blocks/popup/__submit-button/popup__submit-button.css";
+@import "./blocks/popup/__submit-button/_auth/popup__submit-button_auth.css";
 @import "./blocks/popup/_opened/popup_opened.css";
 @import "./blocks/popup/__input/popup__input.css";
 @import "./blocks/popup/__input/_auth/popup__input_auth.css";

@@ -3,6 +3,12 @@
     color: #FFFFFF;
 }
 
-.popup__input_auth:last-child {
-    margin-bottom: 177p;
+.popup__input_auth:last-of-type {
+    margin-bottom: 177px;
+    /* color: red; */
 }
+
+/* nth-child
+last-child 
+first-of-type
+*/
