@@ -12,6 +12,7 @@ import Form from "./Form";
 const initState = {
   email: '',
   password: '',
+  message: '',
 }
 
 function Login({
@@ -45,11 +46,12 @@ function Login({
 
     duckAuth.authorize(email, password)
     .then((data) => {
-        if (!data.token) { //.jwt
-                  return;
-          // onLogin({
-          //   UnionX
-          // });
+      if (!data.token) {
+        setState(old => ({
+          ...old,
+          message: 'Что-то пошло не так!'
+        }));
+        return;
         }
         setState(initState);    
           // onLogin({ email: "", password: "" }, () => {
@@ -92,7 +94,7 @@ function Login({
           placeholder="Email"
           maxLength="30"
           onChange={handleChange} //={setEmail}
-          // value={state.email}
+          value={state.email}
         />
         <span id="email-error" className="popup__input-error"></span>
         <input
@@ -102,7 +104,7 @@ function Login({
           className= 'popup__input popup__input_auth'
           placeholder="Пароль"
           onChange={handleChange} //={setPassword}
-          // value={state.password}
+          value={state.password}
         />
         <span id="password-error" className="popup__input-error"></span>
       </Form>

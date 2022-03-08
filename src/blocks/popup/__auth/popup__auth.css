@@ -1,14 +1,13 @@
 .popup__auth {
-    font-family: Inter;
+font-family: Inter;
 font-style: normal;
 font-weight: normal;
 font-size: 14px;
 line-height: 17px;
 /* identical to box height */
-
 text-align: center;
-
 color: #FFFFFF;
+text-decoration: none;
 }
 
 /* до кнопки 15 */

@@ -38,58 +38,58 @@ function App() {
   const history = useHistory();
   const location = useLocation();
 
-  useEffect(() => {
-    tokenCheck();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   tokenCheck();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   // const componentDidMount=()=> {
   //   // настало время проверить токен
   //     tokenCheck();
   //   };
 
-  const handleLogin = (jwt) => {
-    if (!jwt) return;
+  // const tokenCheck = () => {
+  //   if (!localStorage.getItem("jwt")) return;
 
-    localStorage.setItem("jwt", jwt);
-    setState({
-      loggedIn: true,
-      // email
-    });
-    // setState
-    // setState(old => ({...old, loggedIn:true}) )
-    history.push("/users/me"); //"/users/me"
-  };
-
+  //   const jwt = localStorage.getItem("jwt");
+  //   // if (jwt) {
+  //   // проверим токен
+  //   duckAuth
+  //     .getContent(jwt)
+  //     .then((res) => {
+  //       if (res) {    //return;
+  //       const userData = {
+  //         email: res.data.email, // авторизуем пользователя
+  //         id: res.data._id,
+  //       };
+  //       // setState({userData})
+  //       setState(
+  //         {
+  //           loggedIn: true,
+  //           userData,
+  //         },
+  //         () => {
+  //           history.push("/users/me");
+  //         }
+  //       );
+  //     }
+  //       // обернём App.js в withRouter
+  //       // так, что теперь есть доступ к этому методу
+  //       // history.push("/users/me");
+  //     })
+  //     .catch((err) => console.log(err));
+  //   // }
+  // };
   const tokenCheck = () => {
     if (!localStorage.getItem("jwt")) return;
 
     const jwt = localStorage.getItem("jwt");
-    // if (jwt) {
+    if (jwt) {
     // проверим токен
     duckAuth
       .getContent(jwt)
-      // .then((res) => {
-      //   // if (!res) return;
-      //   if (res) {
-      //     const userData = {
-      //       email: res.data.email, // авторизуем пользователя
-      //       id: res.data._id,
-      //     };
-      //     // setState({userData})
-      //     setState(
-      //       {
-      //         loggedIn: true,
-      //         userData,
-      //       },
-      //       () => {
-      //         history.push("/users/me");
-      //       }
-      //     );
-      //   }
-      // })
       .then((res) => {
-        if (!res) return;
+        if (res) {    //return;
         const userData = {
           email: res.data.email, // авторизуем пользователя
           id: res.data._id,
@@ -99,40 +99,51 @@ function App() {
           {
             loggedIn: true,
             userData,
-          },
-          () => {
+          }, () => {
             history.push("/users/me");
           }
         );
+      }
         // обернём App.js в withRouter
         // так, что теперь есть доступ к этому методу
         // history.push("/users/me");
       })
       .catch((err) => console.log(err));
-    // }
+    }
   };
+  const handleLogin = (jwt) => {
+    if (!jwt) return;
+
+    localStorage.setItem("jwt", jwt);
+    // setState({
+    //   loggedIn: true,
+    //   // data
+    // });
+    // setState
+    setState(old => ({...old, loggedIn:true}) )
+    history.push("/users/me"); //"/users/me"
+  };
+
+  // function onSignOut() {
+  //   localStorage.removeItem("jwt");
+  //   history.push("/signin");
+  // }
+
+  // const handleLogin = (jwt) => {
+  //   if (!jwt) return;
+
+  //   localStorage.setItem("jwt", jwt);
+  //   setState({
+  //     loggedIn: true,
+  //     // email
+  //   });
+  //   // setState
+  //   // setState(old => ({...old, loggedIn:true}) )
+  //   history.push("/users/me"); //"/users/me"
+  // };
 
   const handleRegister = () => {
     history.push("/signin");
-    // setIsRegister(true);
-    // history.push("/signin");
-    // isSubmitted//loggedIn
-    //  ? history.push('/signin')
-    //  : history.push('/signup')
-    //  : (src = UnionX)
-
-    // isOpen=(true)
-    // setIsRegister(!isRegister);
-    // setIsRegister(true)
-  };
-
-  const handleInfoToolti = () => {
-    // setIsEditProfilePopupOpen(true);
-    setIsRegister(true);
-    // this.props.history.push('/signin');
-
-    // setIsRegister(!isRegister);
-    // setIsRegister(true)
   };
 
   const handleEditAvatarClick = () => {
@@ -257,7 +268,7 @@ function App() {
   }
 
   useEffect(() => {
-    // tokenCheck();
+    tokenCheck();
     // setState(true);
     // if (loggedIn) {
     const userData = [api.getUserInfo(), api.getInitialCards()];
@@ -292,6 +303,8 @@ function App() {
               onSignOut={onSignOut}
               location={location}
               loggedIn={state.loggedIn}
+              // userData={state.userData}
+              userData={state.userData}
             />
             <Main
               onEditAvatar={handleEditAvatarClick}
@@ -344,7 +357,7 @@ function App() {
       {loggedIn ? <Redirect to="/users/me" /> : <Redirect to="/signin" />} */}
           {/* </Route> */}
           <Route exact path="/">
-            {state.loggedIn ? <Redirect to="/" /> : <Redirect to="/signin" />}
+            {state.loggedIn ? <Redirect to="/users/me" /> : <Redirect to="/signin" />}
           </Route>
         </Switch>
       </CurrentUserContext.Provider>
@@ -357,7 +370,7 @@ function App() {
         name="register"
         // src={src}
         loggedIn={state.loggedIn}
-        handleInfoToolti={handleInfoToolti}
+        // handleInfoToolti={handleInfoToolti}
         location={location}
       />
     </div>

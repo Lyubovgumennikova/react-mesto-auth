@@ -20,16 +20,27 @@ function Register(onLogin, onRegister, setIsRegister, handleInfoToolti, ...props
     }))
   }
   
-  function handleSubmit(e) {
-    e.preventDefault();
-    const {email, password} = state;
+//   function handleSubmit(e) {
+//     e.preventDefault();
+//     const {email, password} = state;
 
-    duckAuth.register(email, password)
-      .then (() => {
-        onLogin.setIsRegister(true)
-        onLogin.handleRegister() 
-      })
-      .catch(() => onLogin.setIsRegister(true))
+//     duckAuth.register(email, password)
+//       .then (() => {
+//         onLogin.setIsRegister(true)
+//         onLogin.handleRegister() 
+//       })
+//       .catch(() => onLogin.setIsRegister(true))
+// }
+function handleSubmit(e) {
+  e.preventDefault();
+  const {email, password} = state;
+
+  duckAuth.register(email, password)
+    .then (() => {
+      onLogin.setIsRegister(true)
+      onLogin.handleRegister() 
+    })
+    .catch(() => onLogin.setIsRegister(true))
 }
 
   // useEffect(() => {
@@ -58,9 +69,9 @@ function Register(onLogin, onRegister, setIsRegister, handleInfoToolti, ...props
           className= 'popup__input popup__input_auth'
           placeholder="Email"
           // maxLength="30"
-          onChange={handleChange}
+          onChange={handleChange}  
           // handleChange={setState.email}
-          // value={state.email}
+          value={state.email}
         />
         <span id="email-error" className="popup__input-error"></span>
         <input
@@ -70,7 +81,7 @@ function Register(onLogin, onRegister, setIsRegister, handleInfoToolti, ...props
           placeholder="Пароль"
           onChange={handleChange}
           // handleChange={setState.password}
-          // value={state.password}
+          value={state.password}
         />
         <span id="password-error" className="popup__input-error"></span>
       </Form>
