@@ -32,7 +32,6 @@ return (
       <h2 className="popup__text popup__text_auth">Регистрация</h2>
       <Form 
         name="register"
-        // title="Регистрация"
         buttonText="Зарегистрироваться"
         isSubmitted={props.isSubmitted}
         setIsSubmitted={props.setIsSubmitted}
@@ -44,7 +43,6 @@ return (
           className= 'popup__input popup__input_auth'
           placeholder="Email"
           onChange={handleChange} 
-          // handleChange={setEmail} 
           value={newEntry.email}
         />
         <span id="email-error" className="popup__input-error"></span>
@@ -54,7 +52,6 @@ return (
           className= 'popup__input popup__input_auth'
           placeholder="Пароль"
           onChange={handleChange}
-          // handleChange={setPassword}
           value={newEntry.password}
         />
         <span id="password-error" className="popup__input-error"></span>

@@ -35,7 +35,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isRegister, setIsRegister] = useState(false);
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // const [password, setPassword] = useState("");
   const history = useHistory();
   const location = useLocation();
 
@@ -47,35 +47,38 @@ function App() {
       .getContent(jwt)
       .then((res) => {
         if (!res) return;
-
+        // email
         const userData = {
           email: res.data.email,
           id: res.data._id,
         };
         // setState({userData})
-        setIsLoggedIn(userData);
+        setIsLoggedIn(true);
         history.push("/");
       })
       .catch((err) => console.log(err));
   };
 
-  const handleLogin = (jwt) => {
-    if (!jwt) return; 
+  const handleLogin = (data) => {
+    // if (!jwt) return; 
     AuthApi
-    .authorize({email, password})
-    .then((data) => {
-      if (!data.token) {
-          return;
-      }
-      localStorage.setItem("jwt", data.token);
+    .authorize(data.email, data.password)
+    .then((jwt) => {
+      if (!jwt.token) return;
+      
       setIsLoggedIn(true);
+      localStorage.setItem("jwt", jwt.token);
+      // data={email, password}
+      history.push("/users/me"); 
     })
     .catch((err) => console.log(err));
-    // if (!jwt) return;
+        
+    // localStorage.setItem("jwt", jwt); 
+    // setIsLoggedIn(true)
+    // setState((old) => ({ ...old, loggedIn: true })); 
 
     
-    setIsLoggedIn((old) => ({ ...old, loggedIn: true }));
-    history.push("/");
+    
   };
 
   const handleRegister = (data) => {
@@ -220,7 +223,8 @@ function App() {
 
   return (
     <div className="page__container">
-      <CurrentUserContext.Provider value={currentUser}>
+      <CurrentUserContext.Provider value={currentUser}> 
+      {/* //{currentUser, isLoggedIn, }  */}
         <Switch>
           <Route path="/signup">
             <Header location={location} />
@@ -232,15 +236,15 @@ function App() {
           <Route path="/signin">
             <Header location={location} />
             {/* onLogin */}
-            <Login handleLogin={handleLogin} loggedIn={isLoggedIn.loggedIn} />
+            <Login onLogin={handleLogin} loggedIn={isLoggedIn} />
           </Route>
-          <ProtectedRoute path="/users/me" loggedIn={isLoggedIn.loggedIn}>
+          <ProtectedRoute path="/users/me" loggedIn={isLoggedIn}>
             <Header
               onSignOut={onSignOut}
               location={location}
-              loggedIn={isLoggedIn.loggedIn}
+              loggedIn={isLoggedIn}
               // userData={state.userData}
-              userData={isLoggedIn.userData}
+              // userData={email}
             />
             <Main
               onEditAvatar={handleEditAvatarClick}
@@ -290,7 +294,7 @@ function App() {
             {/* </CurrentUserContext.Provider> */}
           </ProtectedRoute>
           <Route exact path="/">
-            {isLoggedIn.loggedIn ? (
+            {isLoggedIn? (
               <Redirect to="/users/me" />
             ) : (
               <Redirect to="/signin" />

@@ -1,21 +1,16 @@
 import React, { useState } from "react";
-import * as AuthApi from "../utils/AuthApi.js";
 import Form from "./Form";
-
-const initState = {
-  email: "",
-  password: "",
-};
 
 function Login({
   onLogin,
-  onClose,
-  onRegister,
   isSubmitted,
   setIsSubmitted,
   ...props
 }) {
-  const [state, setState] = useState(initState);
+  const [state, setState] = useState( {
+    email: '',
+    password: '',
+  })
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -33,7 +28,10 @@ function Login({
     if (!email || !password) {
       return;
     }
-    
+    onLogin({ 
+      email,  
+      password,  
+    });
 
     // AuthApi
     //   .authorize(email, password)
@@ -58,7 +56,6 @@ function Login({
       <h2 className="popup__text popup__text_auth">{state.message} </h2>
       <Form
         name="Login"
-        // title="Вход"
         buttonText="Войти"
         isSubmitted={isSubmitted}
         setIsSubmitted={setIsSubmitted}
