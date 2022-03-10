@@ -13,7 +13,8 @@ function Header({ onSignOut, loggedIn, location, userData, email }) {
             Выйти
           </Link>
         </div>
-      ) : location.pathname === "/signin" ? (
+      ) 
+      : location.pathname === "/signin" ? (
         <Link className="header__link" to="/signup">
           Регистрация
         </Link>
@@ -21,7 +22,8 @@ function Header({ onSignOut, loggedIn, location, userData, email }) {
         <Link className="header__link" to="/signin">
           Войти
         </Link>
-      )}
+      )
+      }
     </header>
   );
 }

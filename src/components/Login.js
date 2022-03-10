@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import * as duckAuth from "../utils/duckAuth.js";
+import * as AuthApi from "../utils/AuthApi.js";
 import Form from "./Form";
 
 const initState = {
   email: "",
   password: "",
-  message: "",
 };
 
 function Login({
@@ -34,22 +33,23 @@ function Login({
     if (!email || !password) {
       return;
     }
+    
 
-    duckAuth
-      .authorize(email, password)
-      .then((data) => {
-        if (!data.token) {
-          setState((old) => ({
-            ...old,
-            message: "Что-то пошло не так!",
-          }));
-          return;
-        }
-        setState(initState);
+    // AuthApi
+    //   .authorize(email, password)
+    //   .then((data) => {
+    //     if (!data.token) {
+    //       setState((old) => ({
+    //         ...old,
+    //         message: "Что-то пошло не так!",
+    //       }));
+    //       return;
+    //     }
+    //     setState(initState);
 
-        props.handleLogin(data.token);
-      })
-      .catch((err) => console.log(err));
+    //     props.handleLogin(data.token);
+    //   })
+    //   .catch((err) => console.log(err));
   }
 
   return (

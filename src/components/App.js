@@ -14,7 +14,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import Register from "./Register";
 import Login from "./Login";
 import InfoTooltip from "./InfoTooltip";
-import * as duckAuth from "../utils/duckAuth.js";
+import * as AuthApi from "../utils/AuthApi.js";
 import {
   useHistory,
   useLocation,
@@ -31,17 +31,19 @@ function App() {
   const [cards, setCards] = useState([]);
   // const [inputValue, setInputValue] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [state, setState] = useState({ loggedIn: false });
+  // const [state, setState] = useState({ loggedIn: false });
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isRegister, setIsRegister] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const history = useHistory();
   const location = useLocation();
 
   const tokenCheck = () => {
+    const jwt = localStorage.getItem("jwt");
     if (!localStorage.getItem("jwt")) return;
 
-    const jwt = localStorage.getItem("jwt");
-
-    duckAuth
+    AuthApi
       .getContent(jwt)
       .then((res) => {
         if (!res) return;
@@ -51,25 +53,39 @@ function App() {
           id: res.data._id,
         };
         // setState({userData})
-        setState({
-          loggedIn: true,
-          userData,
-        });
-
-        history.push("/users/me");
+        setIsLoggedIn(userData);
+        history.push("/");
       })
       .catch((err) => console.log(err));
   };
-  const handleLogin = (jwt) => {
-    if (!jwt) return;
 
-    localStorage.setItem("jwt", jwt);
-    setState((old) => ({ ...old, loggedIn: true }));
-    history.push("/users/me");
+  const handleLogin = (jwt) => {
+    if (!jwt) return; 
+    AuthApi
+    .authorize({email, password})
+    .then((data) => {
+      if (!data.token) {
+          return;
+      }
+      localStorage.setItem("jwt", data.token);
+      setIsLoggedIn(true);
+    })
+    .catch((err) => console.log(err));
+    // if (!jwt) return;
+
+    
+    setIsLoggedIn((old) => ({ ...old, loggedIn: true }));
+    history.push("/");
   };
 
-  const handleRegister = () => {
-    history.push("/signin");
+  const handleRegister = (data) => {
+    AuthApi.register(data.email, data.password)
+    .then (() => {
+      setIsRegister(true)
+      history.push("/signin"); 
+    })
+    .catch(() => setIsRegister(true))
+    
   };
 
   const handleEditAvatarClick = () => {
@@ -209,21 +225,22 @@ function App() {
           <Route path="/signup">
             <Header location={location} />
             <Register
-              handleRegister={handleRegister}
+              onRegister={handleRegister}
               setIsRegister={setIsRegister}
             />
           </Route>
           <Route path="/signin">
             <Header location={location} />
-            <Login handleLogin={handleLogin} loggedIn={state.loggedIn} />
+            {/* onLogin */}
+            <Login handleLogin={handleLogin} loggedIn={isLoggedIn.loggedIn} />
           </Route>
-          <ProtectedRoute path="/users/me" loggedIn={state.loggedIn}>
+          <ProtectedRoute path="/users/me" loggedIn={isLoggedIn.loggedIn}>
             <Header
               onSignOut={onSignOut}
               location={location}
-              loggedIn={state.loggedIn}
+              loggedIn={isLoggedIn.loggedIn}
               // userData={state.userData}
-              userData={state.userData}
+              userData={isLoggedIn.userData}
             />
             <Main
               onEditAvatar={handleEditAvatarClick}
@@ -273,7 +290,7 @@ function App() {
             {/* </CurrentUserContext.Provider> */}
           </ProtectedRoute>
           <Route exact path="/">
-            {state.loggedIn ? (
+            {isLoggedIn.loggedIn ? (
               <Redirect to="/users/me" />
             ) : (
               <Redirect to="/signin" />
@@ -285,7 +302,7 @@ function App() {
         isOpen={isRegister}
         onClose={closeAllPopups}
         name="register"
-        loggedIn={state.loggedIn}
+        loggedIn={isLoggedIn.loggedIn}
         location={location}
       />
     </div>

@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { Link} from "react-router-dom";
 import Form from "./Form";
-import * as duckAuth from "../utils/duckAuth.js";
 
-function Register(onLogin,  ...props) {
-  const [state, setState] = useState({
+function Register({ onRegister, ...props}) {
+  const [newEntry, setNewEntry] = useState({
     email: '',
     password: '',
   })
 
   function handleChange(e) {
     const {name, value} = e.target;
-    setState(old => ({
+
+    setNewEntry(old => ({
       ...old,
       [name]: value
     }))
@@ -19,26 +19,17 @@ function Register(onLogin,  ...props) {
   
 function handleSubmit(e) {
   e.preventDefault();
-  const {email, password} = state;
-
-  duckAuth.register(email, password)
-    .then (() => {
-      onLogin.setIsRegister(true)
-      onLogin.handleRegister() 
-    })
-    .catch(() => onLogin.setIsRegister(true))
+  
+  const {email, password} = newEntry;
+  onRegister({ 
+    email,  
+    password,  
+  });
 }
 
-  // useEffect(() => {
-  //   setIsRegister(false)
-  //   // setEmail("");
-  //   // setPassword("");
-  // }, [props.isOpen]);
-
-  return (
+return (
     <div className="popup__field">
       <h2 className="popup__text popup__text_auth">Регистрация</h2>
-      <h2 className="popup__text popup__text_auth">{state.message} </h2>
       <Form 
         name="register"
         // title="Регистрация"
@@ -52,8 +43,9 @@ function handleSubmit(e) {
           name="email"
           className= 'popup__input popup__input_auth'
           placeholder="Email"
-          onChange={handleChange}  
-          value={state.email}
+          onChange={handleChange} 
+          // handleChange={setEmail} 
+          value={newEntry.email}
         />
         <span id="email-error" className="popup__input-error"></span>
         <input
@@ -62,7 +54,8 @@ function handleSubmit(e) {
           className= 'popup__input popup__input_auth'
           placeholder="Пароль"
           onChange={handleChange}
-          value={state.password}
+          // handleChange={setPassword}
+          value={newEntry.password}
         />
         <span id="password-error" className="popup__input-error"></span>
       </Form>
