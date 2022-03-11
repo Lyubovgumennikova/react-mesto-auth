@@ -9,16 +9,21 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import DeleteCardPopup from "./DeleteCardPopup";
-import {Redirect, Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import Register from "./Register";
 import Login from "./Login";
 import InfoTooltip from "./InfoTooltip";
 import * as AuthApi from "../utils/AuthApi.js";
+import UnionV from "../images/UnionV.svg";
+import UnionX from "../images/UnionX.svg";
 import {
   useHistory,
   useLocation,
 } from "react-router-dom/cjs/react-router-dom.min";
+
+// handleRegister(email, password, clearRegisterForm);
+// setIsSuccess(!!(res.data._id && res.data.email))
 
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
@@ -31,11 +36,9 @@ function App() {
   const [cards, setCards] = useState([]);
   // const [inputValue, setInputValue] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-  // const [state, setState] = useState({ loggedIn: false });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isRegister, setIsRegister] = useState(false);
-  const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
+  const [userData, setUserData] = useState("");
   const history = useHistory();
   const location = useLocation();
 
@@ -43,16 +46,15 @@ function App() {
     const jwt = localStorage.getItem("jwt");
     if (!localStorage.getItem("jwt")) return;
 
-    AuthApi
-      .getContent(jwt)
+    AuthApi.getContent(jwt)
       .then((res) => {
         if (!res) return;
-        // email
+
         const userData = {
           email: res.data.email,
           id: res.data._id,
         };
-        // setState({userData})
+        setUserData(userData);
         setIsLoggedIn(true);
         history.push("/");
       })
@@ -60,34 +62,39 @@ function App() {
   };
 
   const handleLogin = (data) => {
-    // if (!jwt) return; 
-    AuthApi
-    .authorize(data.email, data.password)
-    .then((jwt) => {
-      if (!jwt.token) return;
-      
-      setIsLoggedIn(true);
-      localStorage.setItem("jwt", jwt.token);
-      // data={email, password}
-      history.push("/users/me"); 
-    })
-    .catch((err) => console.log(err));
-        
-    // localStorage.setItem("jwt", jwt); 
-    // setIsLoggedIn(true)
-    // setState((old) => ({ ...old, loggedIn: true })); 
+    // if (!jwt) return;
+    AuthApi.authorize(data.email, data.password)
+      .then((jwt) => {
+        if (!jwt.token) return;
 
-    
-    
+        localStorage.setItem("jwt", jwt.token);
+        setIsLoggedIn(true);
+        history.push("/users/me");
+      })
+      .catch((err) => console.log(err));
   };
 
   const handleRegister = (data) => {
     AuthApi.register(data.email, data.password)
-    .then (() => {
-      setIsRegister(true)
-      history.push("/signin"); 
-    })
-    .catch(() => setIsRegister(true))
+      .then(() => {
+        setIsRegister(true);
+        
+
+        history.push("/signin");
+      })
+      .catch(() =>
+        setIsRegister(true, {
+          text: "Вы успешно зарегистрировались!",
+        })
+      );
+  };
+
+  const handleInfoTooltip = () => {
+          setIsRegister(true);
+          // (src = UnionV) : (src = UnionX)
+          // http://codesandbox.io/
+          // text: "Вы успешно зарегистрировались!";
+
     
   };
 
@@ -212,19 +219,26 @@ function App() {
 
   useEffect(() => {
     tokenCheck();
+
+    // if (response.ok) {
+    //   return response.json();
+    // }
+    // return Promise.reject(response.status);
+
     const userData = [api.getUserInfo(), api.getInitialCards()];
-    Promise.all(userData)
-      .then(([userData, items]) => {
-        setCards(items);
-        setCurrentUser(userData);
-      })
-      .catch((err) => console.log(err));
+    if (currentUser)
+      Promise.all(userData)
+        .then(([userData, items]) => {
+          setCards(items);
+          setCurrentUser(userData);
+        })
+        .catch((err) => console.log(err));
   }, []);
 
   return (
     <div className="page__container">
-      <CurrentUserContext.Provider value={currentUser}> 
-      {/* //{currentUser, isLoggedIn, }  */}
+      <CurrentUserContext.Provider value={currentUser}>
+        {/* //{currentUser, isLoggedIn, }  */}
         <Switch>
           <Route path="/signup">
             <Header location={location} />
@@ -243,7 +257,7 @@ function App() {
               onSignOut={onSignOut}
               location={location}
               loggedIn={isLoggedIn}
-              // userData={state.userData}
+              userData={userData}
               // userData={email}
             />
             <Main
@@ -294,7 +308,7 @@ function App() {
             {/* </CurrentUserContext.Provider> */}
           </ProtectedRoute>
           <Route exact path="/">
-            {isLoggedIn? (
+            {isLoggedIn ? (
               <Redirect to="/users/me" />
             ) : (
               <Redirect to="/signin" />
@@ -306,8 +320,9 @@ function App() {
         isOpen={isRegister}
         onClose={closeAllPopups}
         name="register"
-        loggedIn={isLoggedIn.loggedIn}
+        loggedIn={isLoggedIn}
         location={location}
+         // text={text}
       />
     </div>
   );

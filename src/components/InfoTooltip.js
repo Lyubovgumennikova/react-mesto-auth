@@ -12,7 +12,9 @@ function InfoTooltip({
   // UnionV,
   src,
   text,
-  isSubmitted,
+  setIsRegister,
+  response,
+  ...props
 }) {
   return (
     <Popup isOpen={isOpen} name={name} onClose={onClose}>
@@ -21,13 +23,13 @@ function InfoTooltip({
           className="popup__image-register"
           src={
             //src}
-            location.pathname === '/signin'  ? (src = UnionV) : (src = UnionX)
+            props.status === 200 ? (src = UnionV) : (src = UnionX)
           }
           alt={name}
         />
         <figcaption className="popup__text">
-           {/* {text} */}
-          {  location.pathname === '/signin' 
+           {text}
+          {  response 
       ? "Вы успешно зарегистрировались!" 
       : "Что-то пошло не так! Попробуйте ещё раз."} 
         </figcaption>

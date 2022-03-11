@@ -1,30 +1,33 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Route } from "react-router-dom/cjs/react-router-dom.min";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import logo from "../images/logo.svg";
 
-function Header({ onSignOut, loggedIn, location, userData, email }) {
-  const value = React.useContext(CurrentUserContext);
+function Header({ onSignOut, loggedIn, userData }) {
   return (
     <header className="header">
       <img className="header__logo" src={logo} alt="логотип" />
-      {loggedIn ? (
-        <div className="header__link_conteiner">
-          <p className="header__link header__link_email">{value.email}</p>
-          <Link className="header__link" to="/signin" onClick={onSignOut}>
-            Выйти
-          </Link>
-        </div>
-      ) 
-      : location.pathname === "/signin" ? (
-        <Link className="header__link" to="/signup">
-          Регистрация
-        </Link>
-      ) : (
-        <Link className="header__link" to="/signin">
-          Войти
-        </Link>
-      )
+      {
+        loggedIn ? (
+          <div className="header__link_conteiner">
+            <p className="header__link header__link_email">{userData.email}</p>
+            <Link className="header__link" to="/signin" onClick={onSignOut}>
+              Выйти
+            </Link>
+          </div>
+        ) : (
+          <><Route path="/signin">
+              <Link className="header__link" to="/signup">
+                Регистрация
+              </Link>
+            </Route>
+            <Route path='/signup'>
+                <Link className="header__link" to="/signin">
+                  Войти
+                </Link>
+              </Route></>
+        )
       }
     </header>
   );
