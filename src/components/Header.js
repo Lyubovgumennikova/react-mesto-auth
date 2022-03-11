@@ -4,14 +4,14 @@ import { Route } from "react-router-dom/cjs/react-router-dom.min";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import logo from "../images/logo.svg";
 
-function Header({ onSignOut, loggedIn, userData }) {
+function Header({ onSignOut, loggedIn, userData, email }) {
   return (
     <header className="header">
       <img className="header__logo" src={logo} alt="логотип" />
       {
         loggedIn ? (
           <div className="header__link_conteiner">
-            <p className="header__link header__link_email">{userData.email}</p>
+            <p className="header__link header__link_email">{email}</p>
             <Link className="header__link" to="/signin" onClick={onSignOut}>
               Выйти
             </Link>

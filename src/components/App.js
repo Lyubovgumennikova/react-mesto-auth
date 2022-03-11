@@ -21,7 +21,7 @@ import {
   useHistory,
   useLocation,
 } from "react-router-dom/cjs/react-router-dom.min";
-
+// http://codesandbox.io/
 // handleRegister(email, password, clearRegisterForm);
 // setIsSuccess(!!(res.data._id && res.data.email))
 
@@ -38,7 +38,8 @@ function App() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isRegister, setIsRegister] = useState(false);
-  const [userData, setUserData] = useState("");
+  const [infoTooltip, setInfoTooltip] = useState(false);
+  const [email, setEmail] = useState("");
   const history = useHistory();
   const location = useLocation();
 
@@ -54,7 +55,8 @@ function App() {
           email: res.data.email,
           id: res.data._id,
         };
-        setUserData(userData);
+        setEmail(userData.email)
+        // setUserData(userData);
         setIsLoggedIn(true);
         history.push("/");
       })
@@ -65,37 +67,37 @@ function App() {
     // if (!jwt) return;
     AuthApi.authorize(data.email, data.password)
       .then((jwt) => {
-        if (!jwt.token) return;
+        if (!jwt.token) 
+        // const myError = new Error('please improve your code')
+        return;
 
         localStorage.setItem("jwt", jwt.token);
         setIsLoggedIn(true);
         history.push("/users/me");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => setIsRegister(true))
+      // message = "err.message");
+      // console.log(err));
+      .finally(() => {
+        setInfoTooltip(false);
+      });
   };
 
   const handleRegister = (data) => {
     AuthApi.register(data.email, data.password)
       .then(() => {
-        setIsRegister(true);
+       
         
-
+        setInfoTooltip(true)
+        setIsRegister(true);
         history.push("/signin");
       })
-      .catch(() =>
-        setIsRegister(true, {
-          text: "Вы успешно зарегистрировались!",
-        })
-      );
-  };
-
-  const handleInfoTooltip = () => {
-          setIsRegister(true);
-          // (src = UnionV) : (src = UnionX)
-          // http://codesandbox.io/
-          // text: "Вы успешно зарегистрировались!";
-
-    
+      .catch((err) => //console.log(err)
+        setIsRegister(true)
+      )
+      .finally(() => {
+        // setInfoTooltip(false);
+      });
   };
 
   const handleEditAvatarClick = () => {
@@ -225,7 +227,7 @@ function App() {
     // }
     // return Promise.reject(response.status);
 
-    const userData = [api.getUserInfo(), api.getInitialCards()];
+    const userData = [api.getUserInfo(), api.getInitialCards(), email];
     if (currentUser)
       Promise.all(userData)
         .then(([userData, items]) => {
@@ -250,15 +252,15 @@ function App() {
           <Route path="/signin">
             <Header location={location} />
             {/* onLogin */}
-            <Login onLogin={handleLogin} loggedIn={isLoggedIn} />
+          <Login onLogin={handleLogin} loggedIn={isLoggedIn}  />
           </Route>
           <ProtectedRoute path="/users/me" loggedIn={isLoggedIn}>
             <Header
               onSignOut={onSignOut}
               location={location}
               loggedIn={isLoggedIn}
-              userData={userData}
-              // userData={email}
+              // userData={userData}
+              email={email}
             />
             <Main
               onEditAvatar={handleEditAvatarClick}
@@ -322,6 +324,7 @@ function App() {
         name="register"
         loggedIn={isLoggedIn}
         location={location}
+        infoTooltip={infoTooltip}
          // text={text}
       />
     </div>

@@ -53,7 +53,7 @@ function Login({
   return (
     <div className="popup__field">
       <h2 className="popup__text popup__text_auth">Вход</h2>
-      <h2 className="popup__text popup__text_auth">{state.message} </h2>
+      <h2 className="popup__text popup__text_auth">{props.message} </h2>
       <Form
         name="Login"
         buttonText="Войти"
