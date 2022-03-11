@@ -15,15 +15,11 @@ import Register from "./Register";
 import Login from "./Login";
 import InfoTooltip from "./InfoTooltip";
 import * as AuthApi from "../utils/AuthApi.js";
-import UnionV from "../images/UnionV.svg";
-import UnionX from "../images/UnionX.svg";
+
 import {
   useHistory,
   useLocation,
 } from "react-router-dom/cjs/react-router-dom.min";
-// http://codesandbox.io/
-// handleRegister(email, password, clearRegisterForm);
-// setIsSuccess(!!(res.data._id && res.data.email))
 
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
@@ -45,7 +41,10 @@ function App() {
 
   const tokenCheck = () => {
     const jwt = localStorage.getItem("jwt");
-    if (!localStorage.getItem("jwt")) return;
+    if (!localStorage.getItem("jwt")) {
+      history.push("/signin");
+      return;
+    }
 
     AuthApi.getContent(jwt)
       .then((res) => {
@@ -55,7 +54,7 @@ function App() {
           email: res.data.email,
           id: res.data._id,
         };
-        setEmail(userData.email)
+        setEmail(userData.email);
         // setUserData(userData);
         setIsLoggedIn(true);
         history.push("/");
@@ -67,17 +66,15 @@ function App() {
     // if (!jwt) return;
     AuthApi.authorize(data.email, data.password)
       .then((jwt) => {
-        if (!jwt.token) 
-        // const myError = new Error('please improve your code')
-        return;
+        if (!jwt.token)
+          // const myError = new Error('please improve your code')
+          return;
 
         localStorage.setItem("jwt", jwt.token);
         setIsLoggedIn(true);
         history.push("/users/me");
       })
       .catch((err) => setIsRegister(true))
-      // message = "err.message");
-      // console.log(err));
       .finally(() => {
         setInfoTooltip(false);
       });
@@ -86,14 +83,14 @@ function App() {
   const handleRegister = (data) => {
     AuthApi.register(data.email, data.password)
       .then(() => {
-       
-        
-        setInfoTooltip(true)
+        setInfoTooltip(true);
         setIsRegister(true);
         history.push("/signin");
       })
-      .catch((err) => //console.log(err)
-        setIsRegister(true)
+      .catch(
+        (
+          err //console.log(err)
+        ) => setIsRegister(true)
       )
       .finally(() => {
         // setInfoTooltip(false);
@@ -221,18 +218,15 @@ function App() {
 
   useEffect(() => {
     tokenCheck();
-
-    // if (response.ok) {
-    //   return response.json();
-    // }
-    // return Promise.reject(response.status);
-
     const userData = [api.getUserInfo(), api.getInitialCards(), email];
+    // if (!isLoggedIn) return;
     if (currentUser)
       Promise.all(userData)
         .then(([userData, items]) => {
           setCards(items);
           setCurrentUser(userData);
+
+          history.push("/users/me");
         })
         .catch((err) => console.log(err));
   }, []);
@@ -240,24 +234,21 @@ function App() {
   return (
     <div className="page__container">
       <CurrentUserContext.Provider value={currentUser}>
-        {/* //{currentUser, isLoggedIn, }  */}
         <Switch>
           <Route path="/signup">
-            <Header location={location} />
+            <Header />
             <Register
               onRegister={handleRegister}
               setIsRegister={setIsRegister}
             />
           </Route>
           <Route path="/signin">
-            <Header location={location} />
-            {/* onLogin */}
-          <Login onLogin={handleLogin} loggedIn={isLoggedIn}  />
+            <Header />
+            <Login onLogin={handleLogin} loggedIn={isLoggedIn} />
           </Route>
           <ProtectedRoute path="/users/me" loggedIn={isLoggedIn}>
             <Header
               onSignOut={onSignOut}
-              location={location}
               loggedIn={isLoggedIn}
               // userData={userData}
               email={email}
@@ -307,15 +298,7 @@ function App() {
               card={selectedCard}
               name="image"
             />
-            {/* </CurrentUserContext.Provider> */}
           </ProtectedRoute>
-          <Route exact path="/">
-            {isLoggedIn ? (
-              <Redirect to="/users/me" />
-            ) : (
-              <Redirect to="/signin" />
-            )}
-          </Route>
         </Switch>
       </CurrentUserContext.Provider>
       <InfoTooltip
@@ -325,7 +308,7 @@ function App() {
         loggedIn={isLoggedIn}
         location={location}
         infoTooltip={infoTooltip}
-         // text={text}
+        // text={text}
       />
     </div>
   );
