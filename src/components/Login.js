@@ -7,14 +7,14 @@ function Login({
   setIsSubmitted,
   ...props
 }) {
-  const [state, setState] = useState( {
+  const [isincluded, setIsincluded] = useState( {
     email: '',
     password: '',
   })
 
   function handleChange(e) {
     const { name, value } = e.target;
-    setState((old) => ({
+    setIsincluded((old) => ({
       ...old,
       [name]: value,
     }));
@@ -23,7 +23,7 @@ function Login({
   function handleSubmit(e) {
     e.preventDefault();
 
-    const { email, password } = state;
+    const { email, password } = isincluded;
 
     if (!email || !password) {
       return;
@@ -33,21 +33,6 @@ function Login({
       password,  
     });
 
-    // AuthApi
-    //   .authorize(email, password)
-    //   .then((data) => {
-    //     if (!data.token) {
-    //       setState((old) => ({
-    //         ...old,
-    //         message: "Что-то пошло не так!",
-    //       }));
-    //       return;
-    //     }
-    //     setState(initState);
-
-    //     props.handleLogin(data.token);
-    //   })
-    //   .catch((err) => console.log(err));
   }
 
   return (
@@ -69,7 +54,7 @@ function Login({
           placeholder="Email"
           maxLength="30"
           onChange={handleChange} //={setEmail}
-          value={state.email}
+          value={isincluded.email}
         />
         <span id="email-error" className="popup__input-error"></span>
         <input
@@ -79,7 +64,7 @@ function Login({
           className="popup__input popup__input_auth"
           placeholder="Пароль"
           onChange={handleChange} //={setPassword}
-          value={state.password}
+          value={isincluded.password}
         />
         <span id="password-error" className="popup__input-error"></span>
       </Form>

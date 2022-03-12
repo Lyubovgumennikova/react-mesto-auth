@@ -15,7 +15,6 @@ import Register from "./Register";
 import Login from "./Login";
 import InfoTooltip from "./InfoTooltip";
 import * as AuthApi from "../utils/AuthApi.js";
-
 import {
   useHistory,
   useLocation,
@@ -54,8 +53,8 @@ function App() {
           email: res.data.email,
           id: res.data._id,
         };
+        // res.data.email
         setEmail(userData.email);
-        // setUserData(userData);
         setIsLoggedIn(true);
         history.push("/");
       })
@@ -92,9 +91,6 @@ function App() {
           err //console.log(err)
         ) => setIsRegister(true)
       )
-      .finally(() => {
-        // setInfoTooltip(false);
-      });
   };
 
   const handleEditAvatarClick = () => {
